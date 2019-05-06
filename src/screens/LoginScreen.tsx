@@ -1,17 +1,18 @@
 import React, {Component} from 'react';
-import {UIManager, LayoutAnimation, Alert, View, Text, StyleSheet} from 'react-native';
+import {Alert, LayoutAnimation, StyleSheet, Text, UIManager, View} from 'react-native';
 import {NavigationScreenProps} from "react-navigation";
 import {Button} from 'react-native-elements';
 import Swiper from 'react-native-swiper';
 import {authorize, refresh, revoke} from 'react-native-app-auth';
-import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import {heightPercentageToDP as hp, widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import {ROUTES} from "../routes";
-import {Metrics, Fonts, Colors} from "../themes";
+import {Colors, Fonts, Metrics} from "../themes";
 import AutoHeightImage from 'react-native-auto-height-image';
 import Images from "../themes/Images";
 import G from '../tools/G';
-import {api_list, fetch, GET, POST} from "../apis";
-import {string} from "prop-types";
+import {api_list, fetch, GET} from "../apis";
+// @ts-ignore
+import Spinner from 'react-native-loading-spinner-overlay';
 
 UIManager.setLayoutAnimationEnabledExperimental &&
 UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -28,6 +29,7 @@ interface State {
     refreshToken?: string;
     scopes?: string[];
     randomKey?: number;
+    doingLogin: boolean;
 };
 
 const config = {
@@ -51,6 +53,7 @@ export default class App extends Component<Props, State> {
         refreshToken: '',
         scopes: [],
         randomKey: 0,
+        doingLogin: false,
     };
 
     animateState(nextState: State | Pick<State, never> | null, delay: number = 0) {
@@ -65,17 +68,17 @@ export default class App extends Component<Props, State> {
     authorize = async () => {
         try {
             console.log('authorize');
+            this.animateState({doingLogin: true});
             const authState = await authorize(config);
 
-            this.animateState(
+            this.setState(
                 {
                     hasLoggedInOnce: true,
                     accessToken: authState.accessToken,
                     accessTokenExpirationDate: authState.accessTokenExpirationDate,
                     refreshToken: authState.refreshToken,
                     scopes: authState.scopes
-                },
-                500
+                }
             );
             G.UserProfile.accessToken = authState.accessToken;
             // this.props.navigation.navigate(ROUTES.UserProfile);
@@ -85,46 +88,62 @@ export default class App extends Component<Props, State> {
                     console.log(response);
                     if (response.statusCode && response.statusCode === 200) {
                         G.UserProfile = response.result;
-                        this.setState({randomKey: Math.random()})
+                        this.animateState({
+                            randomKey: Math.random(),
+                            doingLogin: false,
+                        });
                     }
                 })
                 .catch(err => {
                     console.log(err);
+                    this.animateState({
+                        doingLogin: false
+                    });
                 });
         } catch (error) {
+            this.animateState({doingLogin: false});
             Alert.alert('Failed to log in', error.message);
         }
     };
 
     refresh = async () => {
         try {
+            this.animateState({doingLogin: true});
             const authState = await refresh(config, {
                 refreshToken: this.state.refreshToken
             });
 
-            this.animateState({
+            this.setState({
                 accessToken: authState.accessToken || this.state.accessToken,
                 accessTokenExpirationDate:
                     authState.accessTokenExpirationDate || this.state.accessTokenExpirationDate,
-                refreshToken: authState.refreshToken || this.state.refreshToken
+                refreshToken: authState.refreshToken || this.state.refreshToken,
+                randomKey: Math.random(),
             });
+            this.animateState({doingLogin: false});
         } catch (error) {
+            this.animateState({doingLogin: false});
             Alert.alert('Failed to refresh token', error.message);
         }
     };
 
     revoke = async () => {
         try {
+            this.animateState({doingLogin: true});
             await revoke(config, {
                 tokenToRevoke: this.state.accessToken,
                 sendClientId: true
             });
-            this.animateState({
+            G.UserProfile = {};
+            this.setState({
                 accessToken: '',
                 accessTokenExpirationDate: '',
-                refreshToken: ''
+                refreshToken: '',
+                randomKey: Math.random(),
             });
+            this.animateState({doingLogin: false});
         } catch (error) {
+            this.animateState({doingLogin: false});
             Alert.alert('Failed to revoke token', error.message);
         }
     };
@@ -135,8 +154,13 @@ export default class App extends Component<Props, State> {
         console.log('userProfile', userProfile);
         return (
             <View style={styles.mainDiv} key={state.randomKey}>
+                <Spinner
+                    visible={this.state.doingLogin}
+                    // textContent={'Loading...'}
+                    textStyle={styles.descText}
+                />
                 <AutoHeightImage width={wp(60)} source={Images.logo}/>
-                {!state.accessToken &&
+                {!userProfile.firstName &&
                 <View style={styles.sliderSec}>
                     <Swiper
                         showsButtons={false}
@@ -169,47 +193,45 @@ export default class App extends Component<Props, State> {
                             </Text>
                         </View>
                     </Swiper></View>}
-                {!!state.accessToken && <View>
+                {!!userProfile.firstName && <View>
                     <Text style={styles.headerText}>
                         Logged-In As
                     </Text>
-                    <Text style={styles.descText}>
-                        {!!userProfile.firstName && `${userProfile.firstName} ${userProfile.lastName}`}
-                    </Text>
+                    <Text style={styles.descText}>{`${userProfile.firstName} ${userProfile.lastName}`}</Text>
                 </View>}
                 <View style={styles.buttonSec}>
-                    {!state.accessToken &&
+                    {!userProfile.firstName &&
                     <Button
                         buttonStyle={[styles.buttonDefault, styles.signInButton, ]}
                         onPress={this.authorize}
                         title={"Sign In"}
                         titleStyle={[styles.buttonTextDefault, styles.signInButtonText]}/>}
-                    {!!state.accessToken &&
+                    {!!userProfile.firstName &&
                     <Button
                         buttonStyle={[styles.buttonDefault, styles.signInButton, ]}
                         onPress={() => this.props.navigation.navigate(ROUTES.UserProfile)}
                         title={"View Profile"}
                         titleStyle={[styles.buttonTextDefault, styles.signInButtonText]}/>}
 
-                    {!state.accessToken && <View style={styles.separatorContainer}>
+                    {!userProfile.firstName && <View style={styles.separatorContainer}>
                         <View style={styles.separatorLine}/>
                         <Text style={styles.separatorOr}>Or</Text>
                         <View style={styles.separatorLine}/>
                     </View>}
-                    {!!state.accessToken && <View style={styles.separatorContainer}>
+                    {!!userProfile.firstName && <View style={styles.separatorContainer}>
                         <View style={styles.separatorLine}/>
                         <Text style={styles.separatorOr}>Or</Text>
                         <View style={styles.separatorLine}/>
                         <View/>
                     </View>}
-                    {!state.accessToken &&
+                    {!userProfile.firstName &&
                     <Button
                         type="outline"
                         buttonStyle={[styles.buttonDefault, styles.createAccountButton, ]}
                         onPress={() => this.authorize()}
                         title={"Create Account"}
                         titleStyle={[styles.buttonTextDefault, styles.createAccountButtonText]}/>}
-                    {!!state.accessToken &&
+                    {!!userProfile.firstName &&
                     <Button
                         type="outline"
                         buttonStyle={[styles.buttonDefault, styles.createAccountButton, ]}
