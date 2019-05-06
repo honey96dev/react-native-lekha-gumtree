@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
-    "react-devtools": "react-devtools",
+    "react-devtools": "adb -s localhost:62001 reverse tcp:8097 tcp:8097 && react-devtools",
     "clean": "rm -rf $TMPDIR/react-* && watchman watch-del-all && npm cache clean --force",
     "clean:android": "cd android/ && gradlew clean && cd .. && react-native run-android",
     "newclear": "rm -rf $TMPDIR/react-* && watchman watch-del-all && rm -rf ios/build && rm -rf node_modules/ && npm cache clean --force && npm i",
@@ -26,12 +26,17 @@
     "flow": "flow"
   },
   "dependencies": {
+    "axios": "^0.18.0",
+    "native-base": "^2.12.1",
     "react": "16.8.3",
     "react-native": "0.59.5",
+    "react-native-animatable": "^1.3.2",
     "react-native-app-auth": "^4.3.1",
     "react-native-auto-height-image": "^1.1.0",
+    "react-native-elements": "^1.1.0",
     "react-native-gesture-handler": "^1.2.1",
     "react-native-responsive-screen": "^1.2.2",
+    "react-native-swiper": "^1.5.14",
     "react-native-vector-icons": "^6.4.2",
     "react-navigation": "^3.9.1",
     "react-navigation-transitions": "^1.0.10"

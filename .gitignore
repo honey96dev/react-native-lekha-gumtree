@@ -77,3 +77,4 @@ typings/
 .idea/
 android/
 ios/
+yarn.lock

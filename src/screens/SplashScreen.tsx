@@ -1,15 +1,20 @@
 import React from 'react';
 import {
-    LayoutAnimation, StyleSheet, Text, Animated,
-    Image,
-    Easing, TouchableWithoutFeedback, UIManager, View
+    Animated,
+    Easing,
+    LayoutAnimation,
+    StyleSheet,
+    Text,
+    TouchableWithoutFeedback,
+    UIManager,
+    View
 } from 'react-native';
 import {NavigationScreenProps} from "react-navigation";
 import AutoHeightImage from 'react-native-auto-height-image';
 import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
 // @ts-ignore
-import BlinkView from 'react-native-blink-view';
 import {ROUTES} from "../routes";
+import Images from '../themes/Images';
 
 UIManager.setLayoutAnimationEnabledExperimental &&
 UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -39,24 +44,28 @@ class SplashScreen extends React.Component<Props> {
         await this.performTimeConsumingTask();
     };
 
-    // @ts-ignore
-    animateState(nextState: $Shape<State>, delay: number = 0) {
-        setTimeout(() => {
-            this.setState(() => {
-                LayoutAnimation.easeInEaseOut();
-                return nextState;
-            });
-        }, delay);
+    componentWillUnmount() {
+
     };
+    //
+    // // @ts-ignore
+    // animateState(nextState: $Shape<State>, delay: number = 0) {
+    //     setTimeout(() => {
+    //         this.setState(() => {
+    //             LayoutAnimation.easeInEaseOut();
+    //             return nextState;
+    //         });
+    //     }, delay);
+    // };
 
     performTimeConsumingTask = async () => {
         return new Promise((resolve) =>
             setTimeout(
                 () => {
                     this.animate();
-                    this.animateState({isLoading: false}, 500);
+                    this.setState({isLoading: false});
                 },
-                2000
+                100
             )
         );
     };
@@ -84,7 +93,7 @@ class SplashScreen extends React.Component<Props> {
                 style={styles.container}
                 onPress={() => !this.state.isLoading && this.props.navigation.navigate(ROUTES.Login)}>
                 <View style={styles.mainDiv}>
-                    <AutoHeightImage width={wp(60)} source={require('../../assets/logo.png')}/>
+                    <AutoHeightImage width={wp(60)} source={Images.logo}/>
                     {this.state.isLoading ?
                         <Text style={styles.message}>{message}</Text> :
                         <Animated.Text style={[styles.message, {opacity: opacity}]}>{message}</Animated.Text>
