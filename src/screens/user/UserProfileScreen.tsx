@@ -311,7 +311,7 @@ type Props = MyProps & NavigationScreenProps;
 //     isLoading: boolean;
 // }
 
-class UserProfile extends React.Component<Props> {
+class UserProfileScreen extends React.Component<Props> {
     private animatedValue: Animated.Value;
     state = {
         isLoading: true,
@@ -388,5 +388,5 @@ const styles = StyleSheet.create({
     },
 });
 
-export default UserProfile;
+export default UserProfileScreen;
 

@@ -113,14 +113,14 @@ export default class App extends Component<Props, State> {
                 refreshToken: this.state.refreshToken
             });
 
-            this.setState({
+            this.animateState({
                 accessToken: authState.accessToken || this.state.accessToken,
                 accessTokenExpirationDate:
                     authState.accessTokenExpirationDate || this.state.accessTokenExpirationDate,
                 refreshToken: authState.refreshToken || this.state.refreshToken,
                 randomKey: Math.random(),
+                doingLogin: false,
             });
-            this.animateState({doingLogin: false});
         } catch (error) {
             this.animateState({doingLogin: false});
             Alert.alert('Failed to refresh token', error.message);
@@ -135,13 +135,13 @@ export default class App extends Component<Props, State> {
                 sendClientId: true
             });
             G.UserProfile = {};
-            this.setState({
+            this.animateState({
                 accessToken: '',
                 accessTokenExpirationDate: '',
                 refreshToken: '',
                 randomKey: Math.random(),
+                doingLogin: false
             });
-            this.animateState({doingLogin: false});
         } catch (error) {
             this.animateState({doingLogin: false});
             Alert.alert('Failed to revoke token', error.message);
@@ -157,6 +157,8 @@ export default class App extends Component<Props, State> {
                 <Spinner
                     visible={this.state.doingLogin}
                     // textContent={'Loading...'}
+                    color={Colors.brandPrimary}
+                    ovrerlayColor={'rgba(255, 0, 0, 0.5)'}
                     textStyle={styles.descText}
                 />
                 <AutoHeightImage width={wp(60)} source={Images.logo}/>

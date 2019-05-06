@@ -3,7 +3,7 @@ import {createAppContainer, createSwitchNavigator, createStackNavigator, Navigat
 import {fadeIn} from 'react-navigation-transitions';
 import SplashScreen from '../screens/SplashScreen';
 import LoginScreen from '../screens/LoginScreen';
-import UserProfile from '../screens/user/UserProfile';
+import UserProfileScreen from '../screens/user/UserProfileScreen';
 import {setBaseURL} from "../apis";
 
 // export enum NAVIGATE_STACKS {
@@ -44,7 +44,7 @@ const SplashStack = createSwitchNavigator(
 const UserStack = createStackNavigator(
     {
         [ROUTES.UserProfile]: {
-            screen: UserProfile,
+            screen: UserProfileScreen,
             navigationOptions: {
                 header: null,
             }
