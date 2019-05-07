@@ -2,6 +2,7 @@ interface UserProfile {
     userId?: string;
     firstName?: string;
     lastName?: string;
+    email?: string;
     phone?: string;
     longitude?: number;
     latitude?: number;
@@ -17,8 +18,27 @@ interface UserProfile {
     accessToken?: string;
 };
 
-let UserProfile: UserProfile = {};
 
-export default {
-    UserProfile
-};
+
+// let UserProfile: UserProfile = {};
+
+export default class G {
+    static UserProfile: UserProfile = {};
+    static AppAuthConfig = {
+        issuer: 'https://identity.lekha.com.au',
+        clientId: 'lekha-mobile-app',
+        redirectUrl: 'com.lekha.mobile:/callback',
+        scopes: ['openid', 'profile', 'email', 'offline_access', 'test-mobile-api']
+
+        // serviceConfiguration: {
+        //   authorizationEndpoint: 'https://demo.identityserver.io/connect/authorize',
+        //   tokenEndpoint: 'https://demo.identityserver.io/connect/token',
+        //   revocationEndpoint: 'https://demo.identityserver.io/connect/revoke'
+        // }
+    };
+}
+
+// export default {
+//     UserProfile,
+//     AppAuthConfig,
+// };

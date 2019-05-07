@@ -32,19 +32,6 @@ interface State {
     doingLogin: boolean;
 };
 
-const config = {
-    issuer: 'https://identity.lekha.com.au',
-    clientId: 'lekha-mobile-app',
-    redirectUrl: 'com.lekha.mobile:/callback',
-    scopes: ['openid', 'profile', 'email', 'offline_access', 'test-mobile-api']
-
-    // serviceConfiguration: {
-    //   authorizationEndpoint: 'https://demo.identityserver.io/connect/authorize',
-    //   tokenEndpoint: 'https://demo.identityserver.io/connect/token',
-    //   revocationEndpoint: 'https://demo.identityserver.io/connect/revoke'
-    // }
-};
-
 export default class App extends Component<Props, State> {
     state = {
         hasLoggedInOnce: false,
@@ -52,8 +39,8 @@ export default class App extends Component<Props, State> {
         accessTokenExpirationDate: '',
         refreshToken: '',
         scopes: [],
-        randomKey: 0,
         doingLogin: false,
+        randomKey: 0,
     };
 
     animateState(nextState: State | Pick<State, never> | null, delay: number = 0) {
@@ -69,7 +56,7 @@ export default class App extends Component<Props, State> {
         try {
             console.log('authorize');
             this.animateState({doingLogin: true});
-            const authState = await authorize(config);
+            const authState = await authorize(G.AppAuthConfig);
 
             this.setState(
                 {
@@ -80,26 +67,33 @@ export default class App extends Component<Props, State> {
                     scopes: authState.scopes
                 }
             );
-            G.UserProfile.accessToken = authState.accessToken;
             // this.props.navigation.navigate(ROUTES.UserProfile);
-            // @ts-ignore
-            fetch(GET, api_list.profile, {})
-                .then((response:any) => {
-                    console.log(response);
-                    if (response.statusCode && response.statusCode === 200) {
-                        G.UserProfile = response.result;
+            G.UserProfile.accessToken = authState.accessToken;
+            if (!!authState.accessToken) {
+                // @ts-ignore
+                fetch(GET, api_list.profile, {})
+                    .then((response: any) => {
+                        if (response.statusCode && response.statusCode === 200) {
+                            G.UserProfile = response.result;
+                            G.UserProfile.accessToken = authState.accessToken;
+                            console.log(G.UserProfile);
+                            this.animateState({
+                                randomKey: Math.random(),
+                                doingLogin: false,
+                            });
+                            return;
+                        }
                         this.animateState({
-                            randomKey: Math.random(),
-                            doingLogin: false,
+                            doingLogin: false
                         });
-                    }
-                })
-                .catch(err => {
-                    console.log(err);
-                    this.animateState({
-                        doingLogin: false
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        this.animateState({
+                            doingLogin: false
+                        });
                     });
-                });
+            }
         } catch (error) {
             this.animateState({doingLogin: false});
             Alert.alert('Failed to log in', error.message);
@@ -109,7 +103,7 @@ export default class App extends Component<Props, State> {
     refresh = async () => {
         try {
             this.animateState({doingLogin: true});
-            const authState = await refresh(config, {
+            const authState = await refresh(G.AppAuthConfig, {
                 refreshToken: this.state.refreshToken
             });
 
@@ -130,7 +124,7 @@ export default class App extends Component<Props, State> {
     revoke = async () => {
         try {
             this.animateState({doingLogin: true});
-            await revoke(config, {
+            await revoke(G.AppAuthConfig, {
                 tokenToRevoke: this.state.accessToken,
                 sendClientId: true
             });
@@ -151,7 +145,6 @@ export default class App extends Component<Props, State> {
     render() {
         const {state} = this;
         const userProfile = G.UserProfile;
-        console.log('userProfile', userProfile);
         return (
             <View style={styles.mainDiv} key={state.randomKey}>
                 <Spinner
@@ -236,7 +229,7 @@ export default class App extends Component<Props, State> {
                     {!!userProfile.firstName &&
                     <Button
                         type="outline"
-                        buttonStyle={[styles.buttonDefault, styles.createAccountButton, ]}
+                        buttonStyle={[styles.buttonDefault, styles.createAccountButton]}
                         onPress={() => this.revoke()}
                         title={"Logout"}
                         titleStyle={[styles.buttonTextDefault, styles.createAccountButtonText]}/>}
@@ -274,14 +267,13 @@ const styles = StyleSheet.create({
         width: wp(80),
         height: hp(20),
         color: '#fff',
-        fontSize: 20,
     },
     headerText: {
         // fontFamily:Fonts.type.PlayfairDisplayBold,
         backgroundColor: 'transparent',
         textAlign: 'center',
         alignSelf: 'center',
-        fontSize: hp(3.3),
+        fontSize: Fonts.size.h3,
         width: Metrics.WIDTH * .90,
         color: 'white',
     },
@@ -290,7 +282,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'transparent',
         textAlign: 'center',
         alignSelf: 'center',
-        fontSize: hp(2.2),
+        fontSize: Fonts.size.h5,
         width: Metrics.WIDTH * .70,
         color: 'white',
         marginTop: 20
@@ -359,5 +351,5 @@ const styles = StyleSheet.create({
     signInButtonText: {
         color: 'white',
         backgroundColor: Colors.transparent
-    }
+    },
 });

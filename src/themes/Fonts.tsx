@@ -31,14 +31,14 @@ const type = {
 
 const size = {
   button1: hp(2.2),
-  h1: 38,
+  h1: hp(6),
   h2: 34,
-  h3: 30,
-  h4: 26,
-  h5: 20,
+  h3: hp(3.3),
+  h4: hp(2.7),
+  h5: hp(2.2),
   h6: 19,
   input: 18,
-  regular: 17,
+  regular: hp(1.8),
   medium: 14,
   small: 12,
   tiny: 8.5
