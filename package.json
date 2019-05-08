@@ -26,7 +26,10 @@
     "flow": "flow"
   },
   "dependencies": {
+    "@types/lodash": "^4.14.123",
     "axios": "^0.18.0",
+    "fuse.js": "^3.4.4",
+    "lodash": "^4.17.11",
     "native-base": "^2.12.1",
     "react": "16.8.3",
     "react-native": "0.59.5",

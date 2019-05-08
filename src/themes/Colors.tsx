@@ -26,6 +26,7 @@ const colors = {
   twitter:'#55acee',
   loginBlue:'#0691ce',
   loginGreen:'#4cd964',
+  green:'#00C001',
   txtgrey:'#8e9396',
   whites:'#E8E8E8',
   greys:'#cccccc',
@@ -38,6 +39,9 @@ const colors = {
   blacktxt:'#363636',
   skyblue:'#71d4ff',
   txtsky:'#83c8e7',
+  lightPink: "#FFADF2",
+  grayBlue: "#A4C8F0",
+  lightEggplant: "#C47EFF",
 
   //WooCommerce Color
   veryLightGray: "#dcdcdc",

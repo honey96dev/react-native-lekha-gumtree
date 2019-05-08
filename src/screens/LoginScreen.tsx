@@ -5,14 +5,14 @@ import {Button} from 'react-native-elements';
 import Swiper from 'react-native-swiper';
 import {authorize, refresh, revoke} from 'react-native-app-auth';
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from 'react-native-responsive-screen';
+import AutoHeightImage from 'react-native-auto-height-image';
+// @ts-ignore
+import Spinner from 'react-native-loading-spinner-overlay';
 import {ROUTES} from "../routes";
 import {Colors, Fonts, Metrics} from "../themes";
-import AutoHeightImage from 'react-native-auto-height-image';
 import Images from "../themes/Images";
 import G from '../tools/G';
 import {api_list, fetch, GET} from "../apis";
-// @ts-ignore
-import Spinner from 'react-native-loading-spinner-overlay';
 
 UIManager.setLayoutAnimationEnabledExperimental &&
 UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -197,7 +197,7 @@ export default class App extends Component<Props, State> {
                 <View style={styles.buttonSec}>
                     {!userProfile.firstName &&
                     <Button
-                        buttonStyle={[styles.buttonDefault, styles.signInButton, ]}
+                        buttonStyle={[styles.buttonDefault, styles.signInButton]}
                         onPress={this.authorize}
                         title={"Sign In"}
                         titleStyle={[styles.buttonTextDefault, styles.signInButtonText]}/>}

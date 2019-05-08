@@ -9,7 +9,7 @@ interface UserProfile {
     suburb?: string;
     state?: string;
     postCode?: string;
-    isPublic?: true,
+    isPublic?: boolean,
     day?: number;
     night?: number;
     available?: object[];
@@ -18,7 +18,13 @@ interface UserProfile {
     accessToken?: string;
 };
 
-
+export interface AddressType  {
+    suburb?: string;
+    state?: string;
+    postCode?: string;
+    longitude?: number;
+    latitude?: number;
+}
 
 // let UserProfile: UserProfile = {};
 
