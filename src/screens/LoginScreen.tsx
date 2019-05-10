@@ -3,7 +3,7 @@ import {Alert, LayoutAnimation, StyleSheet, Text, UIManager, View} from 'react-n
 import {NavigationScreenProps} from "react-navigation";
 import {Button} from 'react-native-elements';
 import Swiper from 'react-native-swiper';
-import {authorize, refresh, revoke} from 'react-native-app-auth';
+import {authorize, AuthorizeResult, refresh, revoke} from 'react-native-app-auth';
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import AutoHeightImage from 'react-native-auto-height-image';
 // @ts-ignore
@@ -23,13 +23,13 @@ interface MyProps {
 type Props = MyProps & NavigationScreenProps;
 
 interface State {
-    hasLoggedInOnce: boolean;
-    accessToken?: string;
-    accessTokenExpirationDate?: string;
-    refreshToken?: string;
-    scopes?: string[];
-    randomKey?: number;
-    doingLogin: boolean;
+    hasLoggedInOnce: boolean,
+    accessToken?: string,
+    accessTokenExpirationDate?: string,
+    refreshToken?: string,
+    scopes?: string[],
+    randomKey?: number,
+    doingLogin: boolean,
 };
 
 export default class App extends Component<Props, State> {
@@ -56,7 +56,15 @@ export default class App extends Component<Props, State> {
         try {
             console.log('authorize');
             this.animateState({doingLogin: true});
-            const authState = await authorize(G.AppAuthConfig);
+            // const authState = await authorize(G.AppAuthConfig);
+            let authState:AuthorizeResult = {
+                accessToken: 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYmYiOjE1NTc0NjAxODksImV4cCI6MTU1NzQ2Mzc4OSwiaXNzIjoiaHR0cHM6Ly9pZGVudGl0eS5sZWtoYS5jb20uYXUvIiwiYXVkIjpbImh0dHBzOi8vaWRlbnRpdHkubGVraGEuY29tLmF1L3Jlc291cmNlcyIsInRlc3QtbW9iaWxlLWFwaSJdLCJjbGllbnRfaWQiOiJ0ZXN0LWFwcCIsInN1YiI6IjU4ODY1YjIxLTgyNWItNGIyYy04OWU0LTMxMzUxOTk4ZWNiOCIsImF1dGhfdGltZSI6MTU1NzQ2MDE4OSwiaWRwIjoibG9jYWwiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJyYW5qZWV0ZG90bWVAZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZ2l2ZW5uYW1lIjoiUmFuamVldCIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL3N1cm5hbWUiOiJTaW5naCIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWVpZGVudGlmaWVyIjoiNTg4NjViMjEtODI1Yi00YjJjLTg5ZTQtMzEzNTE5OThlY2I4Iiwic2NvcGUiOlsidGVzdC1tb2JpbGUtYXBpIl0sImFtciI6WyJwd2QiXX0.IjgBZqN03sB3dmpe7iVCwzByOhz6a-nJ06H3OyT9VHglB7T4v2oRd5x4pky1GmpLU4AKG-yaUq-iQbQvRVZP1PZ6ItwUa3L9qqKcCuzkDL3daUUVX9rVU9jPA-EzO_GXmGqSIHkx2LLNlmqqILWI3jEXx6RKbTlT5uIHxKwGd2FHjNClP-wIk0a_MHnqXuKEu9ePKMFWkJ9KZqciNRfqYtjQxbXLwiGlNBpm4-6IENQVhc77-ha7wY1E5Ac8Fk3TR0NOi7v0lGqCeSh6xc7CjTSyNDs0lBK7ha5aNNdxZ1O_RwRhwH4Zfc2HuP2bhCwnFeVnHNbglOscwqck2pVsbw',
+                accessTokenExpirationDate: '',
+                idToken: '',
+                refreshToken: '',
+                tokenType: '',
+                scopes: [''],
+            };
 
             this.setState(
                 {
@@ -64,7 +72,7 @@ export default class App extends Component<Props, State> {
                     accessToken: authState.accessToken,
                     accessTokenExpirationDate: authState.accessTokenExpirationDate,
                     refreshToken: authState.refreshToken,
-                    scopes: authState.scopes
+                    scopes: authState.scopes,
                 }
             );
             // this.props.navigation.navigate(ROUTES.UserProfile);
@@ -76,7 +84,7 @@ export default class App extends Component<Props, State> {
                         if (response.statusCode && response.statusCode === 200) {
                             G.UserProfile = response.result;
                             G.UserProfile.accessToken = authState.accessToken;
-                            console.log(G.UserProfile);
+                            // console.log(G.UserProfile);
                             this.animateState({
                                 randomKey: Math.random(),
                                 doingLogin: false,
@@ -204,7 +212,7 @@ export default class App extends Component<Props, State> {
                     {!!userProfile.firstName &&
                     <Button
                         buttonStyle={[styles.buttonDefault, styles.signInButton, ]}
-                        onPress={() => this.props.navigation.navigate(ROUTES.UserProfile)}
+                        onPress={() => this.props.navigation.navigate(ROUTES.UserMain)}
                         title={"View Profile"}
                         titleStyle={[styles.buttonTextDefault, styles.signInButtonText]}/>}
 

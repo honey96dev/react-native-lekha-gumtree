@@ -13,16 +13,16 @@ import {Colors, Fonts, Metrics} from "../../themes";
 import BaseIcon from "../../components/BaseIcon";
 import SearchLocations from '../../tools/LocationApi';
 
-interface SearchLocationProps {
+interface Props {
     trigger: 'onFocus' | 'onPress',
     text?: string,
     onSelected: (address: AddressType) => void,
     onCancel: () => void,
     // @ts-ignore
-    children: Element<typeof Input> | Element<typeof Text>
+    children: Element<typeof Input> | Element<typeof Text>,
 };
 
-interface SearchLocationState {
+interface State {
     text?: string,
     searchedAddresses: AddressType[],
     showList: boolean,
@@ -33,14 +33,14 @@ export interface TriggerProps {
     onFocus?: () => void;
 };
 
-export default class SearchLocation extends Component<SearchLocationProps, SearchLocationState> {
+export default class SearchLocationModal extends Component<Props, State> {
     static SELECT_LOCATION_HELPER_STRING: string = 'Select Location';
     private searchLocations: (() => void);
-    constructor (props: SearchLocationProps) {
+    constructor (props: Props) {
         super(props);
 
         this.state = {
-            text: props.text === SearchLocation.SELECT_LOCATION_HELPER_STRING ? '' : props.text,
+            text: props.text === SearchLocationModal.SELECT_LOCATION_HELPER_STRING ? '' : props.text,
             searchedAddresses: [],
             showList: false,
         }
@@ -72,7 +72,7 @@ export default class SearchLocation extends Component<SearchLocationProps, Searc
             // console.log('searchLocations', searchedAddresses);
             this.setState({ searchedAddresses: searchedAddresses });
         }
-    }
+    };
 
     getTextFromAddress = (address: AddressType) => {
         let items = [];
@@ -86,13 +86,13 @@ export default class SearchLocation extends Component<SearchLocationProps, Searc
             items.push(address.postCode);
         }
         return items.join(', ');
-    }
+    };
 
     onAddressSelected = (address: AddressType) => {
         const text = this.getTextFromAddress(address);
         this.setState({ text: text, showList: false });
         this.props.onSelected(address);
-    }
+    };
 
     render () {
         var trigger = this.props.trigger;
@@ -108,21 +108,26 @@ export default class SearchLocation extends Component<SearchLocationProps, Searc
             <View style={styles.parentView}>
                 {React.cloneElement(this.props.children, newProps)}
                 <Modal
-                    visible={this.state.showList}
+                    animationType="slide"
                     transparent={false}
+                    visible={this.state.showList}
                 >
                     <View style={styles.header}>
                         <View style={styles.searchRow}>
                             <BaseIcon
                                 containerStyle={{
-                                    backgroundColor: Colors.white,
+                                    backgroundColor: Colors.brandPrimary,
                                     height: hp(4),
                                     width: hp(4),
                                     borderRadius: hp(2),
                                     marginTop: hp(1),
                                     marginEnd: 0,
                                 }}
-                                icon={{type: "material", name: "close", color: Colors.brandPrimary}}
+                                icon={{
+                                    size: Metrics.icons.large,
+                                    type: "material",
+                                    name: "arrow-back",
+                                    color: Colors.white}}
                                 onPress={() => this.onCancel()}
                                 // style={{ height: hp(4), marginLeft: Metrics.baseMargin}}
                             />

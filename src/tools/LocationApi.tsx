@@ -14,7 +14,7 @@ const options = {
 const fuse = new Fuse(Cities, options);
 //Create a public facing search method
 //So we can replace it with api call later
-console.log('fuse', fuse);
+// console.log('fuse', fuse);
 const search = (term: string) => fuse.search(term);
 
 export default search;

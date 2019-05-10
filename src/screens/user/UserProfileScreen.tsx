@@ -8,11 +8,13 @@ import {revoke} from 'react-native-app-auth';
 // @ts-ignore
 import Spinner from 'react-native-loading-spinner-overlay';
 import {Colors, Fonts, Metrics} from "../../themes";
-import G, {AddressType} from "../../tools/G";
+import G, {AddressType, DayAvailability} from "../../tools/G";
 import {ROUTES} from "../../routes";
 import InfoText from "../../components/InfoText";
 import BaseIcon from "../../components/BaseIcon";
-import SearchLocation from "./SearchLocation";
+import SearchLocationModal from "./SearchLocationModal";
+import AvailabilityModal from "./AvailabilityModal";
+import {api_list, fetch, GET, PUT} from "../../apis";
 
 UIManager.setLayoutAnimationEnabledExperimental &&
 UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -40,7 +42,7 @@ class UserProfileScreen extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
         // this.animatedValue = new Animated.Value(0);
-        console.log(G.UserProfile);
+        // console.log(G.UserProfile);
     }
 
     componentDidMount() {
@@ -82,7 +84,7 @@ class UserProfileScreen extends React.Component<Props, State> {
 
     switchProfileIsPublic = () => {
         G.UserProfile.isPublic = !G.UserProfile.isPublic;
-        console.log(G.UserProfile.isPublic);
+        // console.log(G.UserProfile.isPublic);
         // this.animateState({isPublicKey: Math.random()});
         this.setState({randomKey: Math.random()});
     };
@@ -98,8 +100,8 @@ class UserProfileScreen extends React.Component<Props, State> {
     };
 
     getAddressText = () => {
-        console.log('User info in get address text is');
-        console.info(G.UserProfile);
+        // console.log('User info in get address text is');
+        // console.info(G.UserProfile);
         const user = G.UserProfile;
         if (user) {
             let items = [];
@@ -115,10 +117,56 @@ class UserProfileScreen extends React.Component<Props, State> {
             if (items.length) {
                 return items.join(', ');
             } else {
-                return SearchLocation.SELECT_LOCATION_HELPER_STRING;
+                return SearchLocationModal.SELECT_LOCATION_HELPER_STRING;
             }
         }
-        return SearchLocation.SELECT_LOCATION_HELPER_STRING;
+        return SearchLocationModal.SELECT_LOCATION_HELPER_STRING;
+    };
+
+    onAvailabilitySelected = (selected: DayAvailability[]) => {
+        G.UserProfile.available = selected;
+        this.setState({randomKey: Math.random()});
+        // console.log('onAvailabilitySelected', G.UserProfile.available);
+    };
+
+    saveProfile = () => {
+        const profile = G.UserProfile;
+        const params = JSON.stringify(profile);
+        // const params = {
+        //     userId: profile.userId,
+        //     firstName: profile.firstName,
+        //     lastName: string,
+        //     email: string,
+        //     phone: string,
+        //     longitude: number,
+        //     latitude: number,
+        //     suburb: string,
+        //     state: string,
+        //     postCode: string,
+        //     isPublic: boolean,
+        //         day: number,
+        //     night: number,
+        //     available: DayAvailability[],
+        //     dateRegistered: string,
+        //     bookmarks: profile.bookmarks.join(''),
+        // };
+        this.animateState({
+            doingLogin: true
+        });
+        // @ts-ignore
+        fetch(PUT, api_list.profile, profile)
+            .then((response: any) => {
+                console.log(response);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+            .finally(() => {
+                this.animateState({
+                    doingLogin: false
+                });
+                this.props.navigation.navigate(ROUTES.UserMain);
+            });
     };
 
     // animate = () => {
@@ -140,6 +188,7 @@ class UserProfileScreen extends React.Component<Props, State> {
             email,
             phone,
             isPublic,
+            available,
         } = G.UserProfile;
         let avatar: string = "";
         if (firstName) {
@@ -159,6 +208,24 @@ class UserProfileScreen extends React.Component<Props, State> {
                 <Header
                     containerStyle={styles.header}
                     backgroundColor={Colors.brandPrimary}
+                    leftComponent={
+                        <BaseIcon
+                            containerStyle={{
+                                backgroundColor: Colors.transparent,
+                                height: hp(4),
+                                width: hp(4),
+                                borderRadius: hp(2),
+                                // marginTop: hp(1),
+                                marginEnd: 0,
+                            }}
+                            icon={{
+                                size: Metrics.icons.large,
+                                type: "material",
+                                name: "arrow-back",
+                                color: Colors.white}}
+                            onPress={() => this.props.navigation.navigate(ROUTES.UserMain)}
+                            // style={{ height: hp(4), marginLeft: Metrics.baseMargin}}
+                        />}
                     centerComponent={{
                         text: 'Profile',
                         style: {
@@ -166,13 +233,24 @@ class UserProfileScreen extends React.Component<Props, State> {
                             fontSize: Fonts.size.h4,
                         }
                     }}
-                    rightComponent={{
-                        text: 'Edit',
-                        style: {
-                            color: '#fff',
-                            fontSize: Fonts.size.h5,
-                        }
-                    }}
+                    rightComponent={
+                        <BaseIcon
+                            containerStyle={{
+                                backgroundColor: Colors.transparent,
+                                height: hp(4),
+                                width: hp(4),
+                                borderRadius: hp(2),
+                                // marginTop: hp(1),
+                                marginEnd: 0,
+                            }}
+                            icon={{
+                                size: Metrics.icons.large,
+                                type: "material",
+                                name: "done",
+                                color: Colors.white}}
+                            onPress={() => this.saveProfile()}
+                            // style={{ height: hp(4), marginLeft: Metrics.baseMargin}}
+                        />}
                 />
                 <View style={styles.userRow}>
                     <View style={styles.userImage}>
@@ -229,7 +307,7 @@ class UserProfileScreen extends React.Component<Props, State> {
                                     alignItems: "flex-end"
                                 }}
                             >
-                                <SearchLocation
+                                <SearchLocationModal
                                     text={this.getAddressText()}
                                     trigger="onPress"
                                     onCancel={() => console.log("On Cancel")}
@@ -238,7 +316,7 @@ class UserProfileScreen extends React.Component<Props, State> {
                                     <Text style={{color: "#43484d"}}>
                                         {this.getAddressText()}
                                     </Text>
-                                </SearchLocation>
+                                </SearchLocationModal>
                             </View>
                         }
                     />
@@ -251,6 +329,24 @@ class UserProfileScreen extends React.Component<Props, State> {
                                 containerStyle={{backgroundColor: Colors.skyblue}}
                                 icon={{type: "feather", name: "calendar"}}
                             />
+                        }
+                        rightIcon={
+                            <View
+                                style={{
+                                    flex: 1,
+                                    height: 15,
+                                    justifyContent: "center",
+                                    alignItems: "flex-end"
+                                }}
+                            >
+                                <AvailabilityModal
+                                    items={available}
+                                    title="Availability"
+                                    onChange={this.onAvailabilitySelected}
+                                >
+                                    <Text style={{color: "#43484d"}}> Edit</Text>
+                                </AvailabilityModal>
+                            </View>
                         }/>
 
                     <InfoText text="More"/>

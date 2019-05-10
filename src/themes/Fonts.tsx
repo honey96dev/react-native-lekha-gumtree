@@ -36,7 +36,7 @@ const size = {
   h3: hp(3.3),
   h4: hp(2.7),
   h5: hp(2.2),
-  h6: 19,
+  h6: hp(1.9),
   input: hp(2),
   regular: hp(1.8),
   medium: 14,
