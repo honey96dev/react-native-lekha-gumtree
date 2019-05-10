@@ -5,9 +5,9 @@
 import React, {Component} from 'react';
 import _ from 'lodash';
 import {AddressType} from '../../tools/G';
-import {Button, Header, Icon, Input, ListItem, Text} from 'react-native-elements';
+import {Input, ListItem, Text} from 'react-native-elements';
 import {Modal, ScrollView, StyleSheet, View} from 'react-native';
-import {heightPercentageToDP as hp, widthPercentageToDP as wp} from 'react-native-responsive-screen';
+import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 import {Colors, Fonts, Metrics} from "../../themes";
 import BaseIcon from "../../components/BaseIcon";
@@ -61,7 +61,7 @@ export default class SearchLocationModal extends Component<Props, State> {
     };
 
     onCancel = () => {
-        this.setState({ showList: false, text: '' });
+        this.setState({ showList: false});
         this.props.onCancel();
     };
 
@@ -208,6 +208,7 @@ const styles = StyleSheet.create({
     },
     searchBoxContainer: {
         height: hp(5),
+        // backgroundColor: Colors.white,
         // paddingStart: 0,
         // paddingEnd: 0,
         // marginEnd: wp(10),

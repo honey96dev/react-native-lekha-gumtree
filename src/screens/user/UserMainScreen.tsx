@@ -1,5 +1,5 @@
 import React from 'react';
-import {Alert, Animated, LayoutAnimation, ScrollView, StyleSheet, Text, UIManager, View} from 'react-native';
+import {LayoutAnimation, ScrollView, StyleSheet, Text, UIManager, View} from 'react-native';
 import {NavigationScreenProps} from "react-navigation";
 // @ts-ignore
 import {Avatar, Button, Header, Icon, ListItem} from "react-native-elements";
@@ -12,7 +12,7 @@ import {Colors, Fonts, Metrics} from "../../themes";
 import {ROUTES} from "../../routes";
 import BaseIcon from "../../components/BaseIcon";
 import G, {PostListItem} from "../../tools/G";
-import {api_list, fetch, GET, PUT} from "../../apis";
+import {api_list, fetch, GET} from "../../apis";
 import MySpinner from "../../components/MySpinner";
 
 UIManager.setLayoutAnimationEnabledExperimental &&

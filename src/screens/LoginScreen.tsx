@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import {
     Alert,
-    Animated, Easing,
+    Animated,
+    Easing,
     LayoutAnimation,
     StyleSheet,
     Text,
@@ -12,11 +13,10 @@ import {
 import {NavigationScreenProps} from "react-navigation";
 import {Button} from 'react-native-elements';
 import Swiper from 'react-native-swiper';
-import {authorize, AuthorizeResult, refresh, revoke} from 'react-native-app-auth';
+import {AuthorizeResult, refresh, revoke} from 'react-native-app-auth';
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import AutoHeightImage from 'react-native-auto-height-image';
 // @ts-ignore
-import Spinner from 'react-native-spinkit';
 // import Spinner from 'react-native-loading-spinner-overlay';
 import {ROUTES} from "../routes";
 import {Colors, Fonts, Metrics} from "../themes";
@@ -87,7 +87,7 @@ export default class App extends Component<Props, State> {
             this.animateState({doingLoading: true});
             // const authState = await authorize(G.AppAuthConfig);
             let authState:AuthorizeResult = {
-                accessToken: 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYmYiOjE1NTc0OTU0MjUsImV4cCI6MTU1NzQ5OTAyNSwiaXNzIjoiaHR0cHM6Ly9pZGVudGl0eS5sZWtoYS5jb20uYXUvIiwiYXVkIjpbImh0dHBzOi8vaWRlbnRpdHkubGVraGEuY29tLmF1L3Jlc291cmNlcyIsInRlc3QtbW9iaWxlLWFwaSJdLCJjbGllbnRfaWQiOiJ0ZXN0LWFwcCIsInN1YiI6IjU4ODY1YjIxLTgyNWItNGIyYy04OWU0LTMxMzUxOTk4ZWNiOCIsImF1dGhfdGltZSI6MTU1NzQ5NTQyNCwiaWRwIjoibG9jYWwiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJyYW5qZWV0ZG90bWVAZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZ2l2ZW5uYW1lIjoiUmFuamVldCIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL3N1cm5hbWUiOiJTaW5naCIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWVpZGVudGlmaWVyIjoiNTg4NjViMjEtODI1Yi00YjJjLTg5ZTQtMzEzNTE5OThlY2I4Iiwic2NvcGUiOlsidGVzdC1tb2JpbGUtYXBpIl0sImFtciI6WyJwd2QiXX0.M_DzBdtyzXA5XgkacWdDGer5TVISMNHlT8418ivocKmJ4jnzvot2vX60Fz8JhMy6hbYEiJIGeii4oFbFccchpU1am5nlVOFa2HrNfvkpOybxTW0ugBl01ObU2CEiu1GU4iuj2NbQO-CfYuXuNJtflodSTX4C00myla3-93h4dZyMMbtM_g6ae3aTUVBBqrwzARc2WIvgq4sdlO9VWHmNu6q3G2utoxuqz30F0srOqQK-dSmEAkxfLlOb7OArtr2xw2Lb7kepY9lKtkjg2BdOwezeGzcmWiiPhJQDPO7x6r_2p6rH_d84dvSbUJU-b3mRf7HYTQ8ZU874-w9avIp_Zg',
+                accessToken: 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYmYiOjE1NTc0OTk0MjQsImV4cCI6MTU1NzUwMzAyNCwiaXNzIjoiaHR0cHM6Ly9pZGVudGl0eS5sZWtoYS5jb20uYXUvIiwiYXVkIjpbImh0dHBzOi8vaWRlbnRpdHkubGVraGEuY29tLmF1L3Jlc291cmNlcyIsInRlc3QtbW9iaWxlLWFwaSJdLCJjbGllbnRfaWQiOiJ0ZXN0LWFwcCIsInN1YiI6IjU4ODY1YjIxLTgyNWItNGIyYy04OWU0LTMxMzUxOTk4ZWNiOCIsImF1dGhfdGltZSI6MTU1NzQ5OTQyNCwiaWRwIjoibG9jYWwiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJyYW5qZWV0ZG90bWVAZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZ2l2ZW5uYW1lIjoiUmFuamVldCIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL3N1cm5hbWUiOiJTaW5naCIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWVpZGVudGlmaWVyIjoiNTg4NjViMjEtODI1Yi00YjJjLTg5ZTQtMzEzNTE5OThlY2I4Iiwic2NvcGUiOlsidGVzdC1tb2JpbGUtYXBpIl0sImFtciI6WyJwd2QiXX0.Q1qxBbCPXmxVk4StwRf663gKelVwzmE3MK_TUo3ufeY2qUKh9CNDfvljM1_XuY2YXwPR6oR1ekvLc0sAflJcUL65JZPp6ORR86ozzRvTRWJPLY6MDvcmcuS9k7L6VQ_jiQTSvh3MYn79KFbXHV7VgDGlgyW7PxV4zwT49K5oAF6VBcT2vhlYveh8-HV1xA_yWM9J9vhpX4ZX48jlKEMyktljDqRf67AUh89n5ExFg7zuhqmeOpCgDE6K9LKMqdN_J9SQ49Ee1SzBYG31PPbb_uP8XWW6UZSLvAS4puxNuuyCPbI50ThsUAcvlF9yG71t5_HYWaljyiKgLjWY3eWp6Q',
                 accessTokenExpirationDate: '',
                 idToken: '',
                 refreshToken: '',
@@ -336,7 +336,7 @@ const styles = StyleSheet.create({
     message: {
         margin: 20,
         color: '#fff',
-        fontSize: 20,
+        fontSize: Fonts.size.h5,
     },
     sliderSec: {
         marginTop: hp(5),

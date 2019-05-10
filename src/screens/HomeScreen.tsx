@@ -1,8 +1,18 @@
 import React from 'react';
-import {Alert, Animated, LayoutAnimation, ScrollView, StyleSheet, Text, UIManager, View} from 'react-native';
+import {
+    Alert,
+    Animated,
+    LayoutAnimation,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TouchableWithoutFeedback,
+    UIManager,
+    View
+} from 'react-native';
 import {NavigationScreenProps} from "react-navigation";
 // @ts-ignore
-import {Avatar, Button, Header, Icon, ListItem} from "react-native-elements";
+import {Avatar, Button, Header, Icon, Input, ListItem} from "react-native-elements";
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from 'react-native-responsive-screen';
 // @ts-ignore
 // import Spinner from 'react-native-loading-spinner-overlay';
@@ -11,11 +21,12 @@ import PTRView from 'react-native-pull-to-refresh';
 import {Colors, Fonts, Metrics} from "../themes";
 import {ROUTES} from "../routes";
 import BaseIcon from "../components/BaseIcon";
-import G, {PostListItem} from "../tools/G";
+import G, {AddressType, PostListItem} from "../tools/G";
 import {api_list, fetch, GET, PUT} from "../apis";
 import MySpinner from "../components/MySpinner";
 import AutoHeightImage from "react-native-auto-height-image";
 import Images from "../themes/Images";
+import SearchLocationModal from "./user/SearchLocationModal";
 
 UIManager.setLayoutAnimationEnabledExperimental &&
 UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -29,6 +40,7 @@ type Props = MyProps & NavigationScreenProps;
 interface State {
     doingLoading: boolean,
     randomKey: number,
+    address: AddressType,
     page: number,
     pageSize: number,
     posts: PostListItem[],
@@ -40,6 +52,7 @@ class HomeScreen extends React.Component<Props, State> {
     state = {
         doingLoading: false,
         randomKey: 0,
+        address: {},
         page: 1,
         pageSize: G.ListPageSize,
         posts: [],
@@ -55,6 +68,18 @@ class HomeScreen extends React.Component<Props, State> {
     componentDidMount() {
         // this.animate();
         // this.getList();
+
+        const {postCode, suburb, state, longitude, latitude} = G.UserProfile;
+        this.setState({
+            address: {
+                postCode: postCode,
+                suburb: suburb,
+                state: state,
+                longitude: longitude,
+                latitude: latitude,
+            },
+            randomKey: Math.random(),
+        });
     };
 
     componentWillUnmount() {
@@ -71,7 +96,7 @@ class HomeScreen extends React.Component<Props, State> {
     }
 
     getTextFromAddress = () => {
-        const profile = G.UserProfile;
+        const profile: AddressType = this.state.address;
         let items = [];
         if (!!profile.suburb) {
             items.push(profile.suburb);
@@ -83,6 +108,20 @@ class HomeScreen extends React.Component<Props, State> {
             items.push(profile.postCode);
         }
         return items.join(', ');
+    };
+
+    onLocationSelected = (address: AddressType) => {
+        const {postCode, suburb, state, longitude, latitude} = address;
+        this.setState({
+            address: {
+                postCode: postCode,
+                suburb: suburb,
+                state: state,
+                longitude: longitude,
+                latitude: latitude,
+                randomKey: Math.random(),
+            }
+        });
     };
 
     pull2Refresh = () => {
@@ -149,8 +188,45 @@ class HomeScreen extends React.Component<Props, State> {
         return (
             <View style={styles.container} key={this.state.randomKey}>
                 <AutoHeightImage style={{marginTop: hp(8)}} width={Metrics.logoWidth} source={Images.logo}/>
-                {/*<PTRView onRefresh={this.pull2Refresh} style={styles.scroll}>*/}
-                {/*</PTRView>*/}
+                <View style={{height: Fonts.size.h1,}}>
+                <SearchLocationModal
+                    text={this.getTextFromAddress()}
+                    trigger={'onPress'}
+                    onSelected={this.onLocationSelected}
+                    onCancel={() => {
+                    }}>
+                    <TouchableWithoutFeedback>
+                        <View style={{
+                            // width: wp(65),
+                            margin: Metrics.baseMargin,
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                        }}>
+                            <Icon size={Metrics.icons.large} type={"material"} name={"near-me"} color={Colors.white}/>
+                            <Text
+                                style={{
+                                    marginStart: wp(2),
+                                    fontSize: Fonts.size.h6,
+                                    color: Colors.white
+                                }}>{address}</Text>
+                        </View>
+                    </TouchableWithoutFeedback>
+                </SearchLocationModal>
+                </View>
+                <Input
+                    containerStyle={styles.searchBox}
+                    inputContainerStyle={{borderBottomWidth: 0,}}
+                    placeholder='Search...'
+                    leftIcon={
+                        <Icon
+                            size={Metrics.icons.large}
+                            type={'material'}
+                            name={'search'}
+                        />
+                    }
+                />
+                <PTRView onRefresh={this.pull2Refresh} style={styles.scroll}>
+                </PTRView>
                 <MySpinner visible={this.state.doingLoading} color={Colors.brandPrimary}/>
             </View>
         );
@@ -175,6 +251,14 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center'
+    },
+    searchBox: {
+        marginBottom: Metrics.baseMargin,
+        width: wp(80),
+        height: hp(5),
+        paddingLeft: 0,
+        backgroundColor: Colors.white,
+        borderRadius: hp(2.5),
     },
     scroll: {
         width: '100%',
@@ -205,15 +289,6 @@ const styles = StyleSheet.create({
         marginBottom: 0,
         width: wp(30),
         height: hp(8),
-    },
-    canvas: {
-        width: '60%',
-        resizeMode: 'contain',
-    },
-    message: {
-        margin: 20,
-        color: '#fff',
-        fontSize: 20,
     },
 });
 

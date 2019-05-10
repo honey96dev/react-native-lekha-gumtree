@@ -4,17 +4,16 @@
 //@flow
 import React, {Component} from 'react';
 import {cloneDeep} from "lodash";
-import {DayAvailability} from '../../tools/G';
+import G, {DayAvailability} from '../../tools/G';
 // import {Button, Header, Icon, Text} from 'react-native-elements';
 import {Modal, StyleSheet, View} from 'react-native';
-import { Text, Switch, Icon, Button, Left, Right, Body, Title} from 'native-base';
+import {Button, Icon, Switch, Text} from 'native-base';
 import {Avatar, Header} from 'react-native-elements';
 import {Col, Grid, Row} from "react-native-easy-grid";
 
 import {Colors, Fonts, Metrics} from "../../themes";
 import BaseIcon from "../../components/BaseIcon";
 import {heightPercentageToDP as hp} from "react-native-responsive-screen";
-import G from "../../tools/G";
 
 interface Props {
     defaultVisible?: boolean,
@@ -77,7 +76,7 @@ export const WeekDayRow = (props: WeekDayRowProps) => {
     </Row>;
 };
 
-export default class SearchLocationModal extends Component<Props, State> {
+export default class AvailabilityModal extends Component<Props, State> {
     constructor(props: Props) {
         super(props);
         const defaultAvail: DayAvailability[]=getDefaultAvailability();

@@ -1,9 +1,9 @@
 import React from 'react';
-import {Alert, Animated, LayoutAnimation, ScrollView, StyleSheet, Text, UIManager, View} from 'react-native';
+import {Alert, LayoutAnimation, ScrollView, StyleSheet, Text, UIManager, View} from 'react-native';
 import {NavigationScreenProps} from "react-navigation";
 // @ts-ignore
 import {Avatar, Button, Header, ListItem} from "react-native-elements";
-import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import {heightPercentageToDP as hp, widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import {revoke} from 'react-native-app-auth';
 // @ts-ignore
 // import Spinner from 'react-native-loading-spinner-overlay';
@@ -14,7 +14,7 @@ import InfoText from "../../components/InfoText";
 import BaseIcon from "../../components/BaseIcon";
 import SearchLocationModal from "./SearchLocationModal";
 import AvailabilityModal from "./AvailabilityModal";
-import {api_list, fetch, GET, PUT} from "../../apis";
+import {api_list, fetch, PUT} from "../../apis";
 import MySpinner from "../../components/MySpinner";
 
 UIManager.setLayoutAnimationEnabledExperimental &&
@@ -308,7 +308,7 @@ class UserProfileScreen extends React.Component<Props, State> {
                                     onCancel={() => console.log("On Cancel")}
                                     onSelected={this.onLocationSelected}
                                 >
-                                    <Text style={{color: "#43484d"}}>
+                                    <Text style={{color: "#43484d", width: wp(30)}}>
                                         {this.getAddressText()}
                                     </Text>
                                 </SearchLocationModal>
