@@ -7,12 +7,14 @@ import {authorize, AuthorizeResult, refresh, revoke} from 'react-native-app-auth
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import AutoHeightImage from 'react-native-auto-height-image';
 // @ts-ignore
-import Spinner from 'react-native-loading-spinner-overlay';
+import Spinner from 'react-native-spinkit';
+// import Spinner from 'react-native-loading-spinner-overlay';
 import {ROUTES} from "../routes";
 import {Colors, Fonts, Metrics} from "../themes";
 import Images from "../themes/Images";
 import G from '../tools/G';
 import {api_list, fetch, GET} from "../apis";
+import MySpinner from "../components/MySpinner";
 
 UIManager.setLayoutAnimationEnabledExperimental &&
 UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -29,7 +31,7 @@ interface State {
     refreshToken?: string,
     scopes?: string[],
     randomKey?: number,
-    doingLogin: boolean,
+    doingLoading: boolean,
 };
 
 export default class App extends Component<Props, State> {
@@ -39,7 +41,7 @@ export default class App extends Component<Props, State> {
         accessTokenExpirationDate: '',
         refreshToken: '',
         scopes: [],
-        doingLogin: false,
+        doingLoading: false,
         randomKey: 0,
     };
 
@@ -55,10 +57,10 @@ export default class App extends Component<Props, State> {
     authorize = async () => {
         try {
             console.log('authorize');
-            this.animateState({doingLogin: true});
+            this.animateState({doingLoading: true});
             // const authState = await authorize(G.AppAuthConfig);
             let authState:AuthorizeResult = {
-                accessToken: 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYmYiOjE1NTc0NjAxODksImV4cCI6MTU1NzQ2Mzc4OSwiaXNzIjoiaHR0cHM6Ly9pZGVudGl0eS5sZWtoYS5jb20uYXUvIiwiYXVkIjpbImh0dHBzOi8vaWRlbnRpdHkubGVraGEuY29tLmF1L3Jlc291cmNlcyIsInRlc3QtbW9iaWxlLWFwaSJdLCJjbGllbnRfaWQiOiJ0ZXN0LWFwcCIsInN1YiI6IjU4ODY1YjIxLTgyNWItNGIyYy04OWU0LTMxMzUxOTk4ZWNiOCIsImF1dGhfdGltZSI6MTU1NzQ2MDE4OSwiaWRwIjoibG9jYWwiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJyYW5qZWV0ZG90bWVAZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZ2l2ZW5uYW1lIjoiUmFuamVldCIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL3N1cm5hbWUiOiJTaW5naCIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWVpZGVudGlmaWVyIjoiNTg4NjViMjEtODI1Yi00YjJjLTg5ZTQtMzEzNTE5OThlY2I4Iiwic2NvcGUiOlsidGVzdC1tb2JpbGUtYXBpIl0sImFtciI6WyJwd2QiXX0.IjgBZqN03sB3dmpe7iVCwzByOhz6a-nJ06H3OyT9VHglB7T4v2oRd5x4pky1GmpLU4AKG-yaUq-iQbQvRVZP1PZ6ItwUa3L9qqKcCuzkDL3daUUVX9rVU9jPA-EzO_GXmGqSIHkx2LLNlmqqILWI3jEXx6RKbTlT5uIHxKwGd2FHjNClP-wIk0a_MHnqXuKEu9ePKMFWkJ9KZqciNRfqYtjQxbXLwiGlNBpm4-6IENQVhc77-ha7wY1E5Ac8Fk3TR0NOi7v0lGqCeSh6xc7CjTSyNDs0lBK7ha5aNNdxZ1O_RwRhwH4Zfc2HuP2bhCwnFeVnHNbglOscwqck2pVsbw',
+                accessToken: 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYmYiOjE1NTc0ODM1OTEsImV4cCI6MTU1NzQ4NzE5MSwiaXNzIjoiaHR0cHM6Ly9pZGVudGl0eS5sZWtoYS5jb20uYXUvIiwiYXVkIjpbImh0dHBzOi8vaWRlbnRpdHkubGVraGEuY29tLmF1L3Jlc291cmNlcyIsInRlc3QtbW9iaWxlLWFwaSJdLCJjbGllbnRfaWQiOiJ0ZXN0LWFwcCIsInN1YiI6IjU4ODY1YjIxLTgyNWItNGIyYy04OWU0LTMxMzUxOTk4ZWNiOCIsImF1dGhfdGltZSI6MTU1NzQ4MzU5MCwiaWRwIjoibG9jYWwiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJyYW5qZWV0ZG90bWVAZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZ2l2ZW5uYW1lIjoiUmFuamVldCIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL3N1cm5hbWUiOiJTaW5naCIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWVpZGVudGlmaWVyIjoiNTg4NjViMjEtODI1Yi00YjJjLTg5ZTQtMzEzNTE5OThlY2I4Iiwic2NvcGUiOlsidGVzdC1tb2JpbGUtYXBpIl0sImFtciI6WyJwd2QiXX0.LURJ-1tlf4SBlGR2OhnExwhyTRA42x5VH5RsivPKFXBVebFfMNA1irPfs2exW_HOFjMwlbmbccinVEvb7aa-cxMu0gUpvf06a9HiHE7GrFg9LtBjY84BT9Pu-MVCrM1yIywdvyRv5DEwP5lR0BtFZBBtJfxkojtbJWmkhULEf6NZsB-op0EsBB3i23sEmwQysppDyaeuzgUBJP8xO-93Fg5RvRY3owVyOSqI0HLywyjX0I4hj1RPSwqeiPq1bfaMVFg7u5Ampwc17F8upIpgagiB0V6z4xGv2s5RWfOzY_Hkv0yJWAQCUjgbdhHLUTGPdQ9C_dxekWWQbhO2QuyoeQ',
                 accessTokenExpirationDate: '',
                 idToken: '',
                 refreshToken: '',
@@ -87,30 +89,30 @@ export default class App extends Component<Props, State> {
                             // console.log(G.UserProfile);
                             this.animateState({
                                 randomKey: Math.random(),
-                                doingLogin: false,
+                                doingLoading: false,
                             });
                             return;
                         }
                         this.animateState({
-                            doingLogin: false
+                            doingLoading: false
                         });
                     })
                     .catch(err => {
                         console.log(err);
                         this.animateState({
-                            doingLogin: false
+                            doingLoading: false
                         });
                     });
             }
         } catch (error) {
-            this.animateState({doingLogin: false});
+            this.animateState({doingLoading: false});
             Alert.alert('Failed to log in', error.message);
         }
     };
 
     refresh = async () => {
         try {
-            this.animateState({doingLogin: true});
+            this.animateState({doingLoading: true});
             const authState = await refresh(G.AppAuthConfig, {
                 refreshToken: this.state.refreshToken
             });
@@ -121,17 +123,17 @@ export default class App extends Component<Props, State> {
                     authState.accessTokenExpirationDate || this.state.accessTokenExpirationDate,
                 refreshToken: authState.refreshToken || this.state.refreshToken,
                 randomKey: Math.random(),
-                doingLogin: false,
+                doingLoading: false,
             });
         } catch (error) {
-            this.animateState({doingLogin: false});
+            this.animateState({doingLoading: false});
             Alert.alert('Failed to refresh token', error.message);
         }
     };
 
     revoke = async () => {
         try {
-            this.animateState({doingLogin: true});
+            this.animateState({doingLoading: true});
             await revoke(G.AppAuthConfig, {
                 tokenToRevoke: this.state.accessToken,
                 sendClientId: true
@@ -142,10 +144,10 @@ export default class App extends Component<Props, State> {
                 accessTokenExpirationDate: '',
                 refreshToken: '',
                 randomKey: Math.random(),
-                doingLogin: false
+                doingLoading: false
             });
         } catch (error) {
-            this.animateState({doingLogin: false});
+            this.animateState({doingLoading: false});
             Alert.alert('Failed to revoke token', error.message);
         }
     };
@@ -153,15 +155,9 @@ export default class App extends Component<Props, State> {
     render() {
         const {state} = this;
         const userProfile = G.UserProfile;
+        console.log(state);
         return (
             <View style={styles.mainDiv} key={state.randomKey}>
-                <Spinner
-                    visible={this.state.doingLogin}
-                    // textContent={'Loading...'}
-                    color={Colors.brandPrimary}
-                    ovrerlayColor={'rgba(255, 0, 0, 0.5)'}
-                    textStyle={styles.descText}
-                />
                 <AutoHeightImage width={wp(60)} source={Images.logo}/>
                 {!userProfile.firstName &&
                 <View style={styles.sliderSec}>
@@ -242,6 +238,7 @@ export default class App extends Component<Props, State> {
                         title={"Logout"}
                         titleStyle={[styles.buttonTextDefault, styles.createAccountButtonText]}/>}
                 </View>
+                <MySpinner visible={state.doingLoading} color={Colors.brandPrimary}/>
             </View>
         );
     }

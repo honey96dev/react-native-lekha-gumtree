@@ -8,12 +8,12 @@ import {heightPercentageToDP as hp, widthPercentageToDP as wp} from 'react-nativ
 // import Spinner from 'react-native-loading-spinner-overlay';
 // @ts-ignore
 import PTRView from 'react-native-pull-to-refresh';
-import {Colors, Fonts, Metrics} from "../../themes";
-import {ROUTES} from "../../routes";
-import BaseIcon from "../../components/BaseIcon";
-import G, {PostListItem} from "../../tools/G";
-import {api_list, fetch, GET, PUT} from "../../apis";
-import MySpinner from "../../components/MySpinner";
+import {Colors, Fonts, Metrics} from "../themes";
+import {ROUTES} from "../routes";
+import BaseIcon from "../components/BaseIcon";
+import G, {PostListItem} from "../tools/G";
+import {api_list, fetch, GET, PUT} from "../apis";
+import MySpinner from "../components/MySpinner";
 
 UIManager.setLayoutAnimationEnabledExperimental &&
 UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -33,7 +33,7 @@ interface State {
     // isPublicKey: number;
 }
 
-class UserMainScreen extends React.Component<Props, State> {
+class HomeScreen extends React.Component<Props, State> {
     // private animatedValue: Animated.Value;
     state = {
         doingLoading: false,
@@ -321,5 +321,5 @@ const styles = StyleSheet.create({
     },
 });
 
-export default UserMainScreen;
+export default HomeScreen;
 

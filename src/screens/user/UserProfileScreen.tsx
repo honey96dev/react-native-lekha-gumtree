@@ -6,7 +6,7 @@ import {Avatar, Button, Header, ListItem} from "react-native-elements";
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import {revoke} from 'react-native-app-auth';
 // @ts-ignore
-import Spinner from 'react-native-loading-spinner-overlay';
+// import Spinner from 'react-native-loading-spinner-overlay';
 import {Colors, Fonts, Metrics} from "../../themes";
 import G, {AddressType, DayAvailability} from "../../tools/G";
 import {ROUTES} from "../../routes";
@@ -15,6 +15,7 @@ import BaseIcon from "../../components/BaseIcon";
 import SearchLocationModal from "./SearchLocationModal";
 import AvailabilityModal from "./AvailabilityModal";
 import {api_list, fetch, GET, PUT} from "../../apis";
+import MySpinner from "../../components/MySpinner";
 
 UIManager.setLayoutAnimationEnabledExperimental &&
 UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -26,7 +27,7 @@ interface MyProps {
 type Props = MyProps & NavigationScreenProps;
 
 interface State {
-    doingLogin: boolean;
+    doingLoading: boolean;
     randomKey: number;
     // isPublicKey: number;
 }
@@ -34,7 +35,7 @@ interface State {
 class UserProfileScreen extends React.Component<Props, State> {
     // private animatedValue: Animated.Value;
     state = {
-        doingLogin: false,
+        doingLoading: false,
         randomKey: 0,
         // isPublicKey: 0,
     };
@@ -66,7 +67,7 @@ class UserProfileScreen extends React.Component<Props, State> {
         try {
             console.log('sign out', G.UserProfile.accessToken);
             // return;
-            this.animateState({doingLogin: true});
+            this.animateState({doingLoading: true});
             if (!!G.UserProfile.accessToken) {
                 await revoke(G.AppAuthConfig, {
                     tokenToRevoke: G.UserProfile.accessToken,
@@ -74,10 +75,10 @@ class UserProfileScreen extends React.Component<Props, State> {
                 });
             }
             G.UserProfile = {};
-            this.animateState({doingLogin: false});
+            this.animateState({doingLoading: false});
             this.props.navigation.navigate(ROUTES.Login);
         } catch (error) {
-            this.animateState({doingLogin: false});
+            this.animateState({doingLoading: false});
             Alert.alert('Failed to revoke token', error.message);
         }
     };
@@ -151,7 +152,7 @@ class UserProfileScreen extends React.Component<Props, State> {
         //     bookmarks: profile.bookmarks.join(''),
         // };
         this.animateState({
-            doingLogin: true
+            doingLoading: true
         });
         // @ts-ignore
         fetch(PUT, api_list.profile, profile)
@@ -163,7 +164,7 @@ class UserProfileScreen extends React.Component<Props, State> {
             })
             .finally(() => {
                 this.animateState({
-                    doingLogin: false
+                    doingLoading: false
                 });
                 this.props.navigation.navigate(ROUTES.UserMain);
             });
@@ -199,12 +200,6 @@ class UserProfileScreen extends React.Component<Props, State> {
         }
         return (
             <View style={styles.container} key={this.state.randomKey}>
-                <Spinner
-                    visible={this.state.doingLogin}
-                    // textContent={'Loading...'}
-                    color={Colors.brandPrimary}
-                    ovrerlayColor={'rgba(255, 0, 0, 0.5)'}
-                />
                 <Header
                     containerStyle={styles.header}
                     backgroundColor={Colors.brandPrimary}
@@ -396,6 +391,7 @@ class UserProfileScreen extends React.Component<Props, State> {
                             />
                         }/>
                 </ScrollView>
+                <MySpinner visible={this.state.doingLoading} color={Colors.brandPrimary}/>
             </View>
         );
     };
