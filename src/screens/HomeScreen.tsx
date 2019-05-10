@@ -14,6 +14,8 @@ import BaseIcon from "../components/BaseIcon";
 import G, {PostListItem} from "../tools/G";
 import {api_list, fetch, GET, PUT} from "../apis";
 import MySpinner from "../components/MySpinner";
+import AutoHeightImage from "react-native-auto-height-image";
+import Images from "../themes/Images";
 
 UIManager.setLayoutAnimationEnabledExperimental &&
 UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -52,7 +54,7 @@ class HomeScreen extends React.Component<Props, State> {
 
     componentDidMount() {
         // this.animate();
-        this.getList();
+        // this.getList();
     };
 
     componentWillUnmount() {
@@ -146,98 +148,9 @@ class HomeScreen extends React.Component<Props, State> {
         console.log('posts', posts);
         return (
             <View style={styles.container} key={this.state.randomKey}>
-                <Header
-                    containerStyle={styles.header}
-                    backgroundColor={Colors.brandPrimary}
-                    leftComponent={
-                        <View style={{width: hp(70), paddingLeft: Metrics.basePadding, flexDirection: "row", alignItems: "center",}}>
-                            <Avatar containerStyle={{marginRight: Metrics.baseMargin}} size="large" rounded title={avatar}/>
-                            <View>
-                                {(!!firstName || !!lastName) && <Text style={{fontSize: Fonts.size.h5, color: Colors.white,}}>
-                                    {firstName} {lastName}
-                                </Text>}
-                                {!!address && <Text style={{fontSize: Fonts.size.regular, color: Colors.white, }}>{address}</Text>}
-                            </View>
-                        </View>
-                    }
-                    rightComponent={
-                        <BaseIcon
-                            containerStyle={{
-                                backgroundColor: Colors.transparent,
-                                height: hp(6),
-                                width: hp(6),
-                                borderRadius: hp(2),
-                                // marginTop: hp(1),
-                                marginEnd: 0,
-                            }}
-                            icon={{
-                                size: Metrics.icons.xl,
-                                type: "material",
-                                name: "settings",
-                                color: Colors.white}}
-                            onPress={() => this.props.navigation.navigate(ROUTES.UserProfile)}
-                            // style={{ height: hp(4), marginLeft: Metrics.baseMargin}}
-                        />}
-                />
-                <PTRView onRefresh={this.pull2Refresh} style={styles.scroll}>
-                    <ScrollView contentContainerStyle={styles.listContainer}>
-                        {posts.map((item: PostListItem) => {
-                            const {
-                                title, description,
-                                carTypeName, carMake, carModel,
-                                priceModelName,
-                                suburb, state, postCode,
-                                shiftTypeName, shiftDate} = item;
-                            let items = [];
-                            if (!!suburb) {
-                                items.push(suburb);
-                            }
-                            if (!!state) {
-                                items.push(state);
-                            }
-                            if (!!postCode) {
-                                items.push(postCode);
-                            }
-                            const address = items.join(', ');
-                            items = [];
-                            if (!!shiftDate && shiftDate.length >= 10) {
-                                if (shiftDate.length >= 10) {
-                                    items.push(shiftDate.substr(0, 10));
-                                } else {
-                                    items.push(shiftDate);
-                                }
-                            }
-                            if (!!shiftTypeName) {
-                                items.push(shiftTypeName);
-                            }
-                            const shift = items.join(' | ');
-                            return (
-                                <ListItem
-                                    key={item.id}
-                                    containerStyle={styles.listItemContainer}
-                                    title={
-                                        <View>
-                                            <Text style={{color: Colors.blacktxt, fontSize: Fonts.size.h5}}>{title}</Text>
-                                            <Text style={{color: Colors.blacktxt, fontSize: Fonts.size.h6}}>
-                                                {carTypeName} | {carModel} | {carMake}
-                                            </Text>
-                                            <Text style={{color: Colors.blacktxt, fontSize: Fonts.size.h4, fontWeight
-                                            : "bold"}}>{priceModelName}</Text>
-                                            <View style={{flex: 1, flexDirection: 'row', alignItems: 'center',}}>
-                                                {/*<View style={{flexDirection: 'row', alignItems: 'center',}}>*/}
-                                                    <Icon size={Metrics.icons.medium} type={"material"} name={"place"}/>
-                                                    <Text style={{color: Colors.blacktxt, flex: 1, fontSize: Fonts.size.h6}}>{address}</Text>
-                                                {/*</View>*/}
-                                                <Text style={{color: Colors.blacktxt, flex: 1, textAlign: "right", fontSize: Fonts.size.h6}}>{shift}</Text>
-                                            </View>
-                                        </View>
-                                    }/>
-                            );
-                        })}
-                        {!!posts.length && posts.length >= this.state.pageSize && <Button type="clear" title={"Load more"} buttonStyle={styles.loadMoreButton} titleStyle={{color: Colors.brandPrimary, fontSize: Fonts.size.h5}} onPress={() => this.loadMore()}/>}
-
-                    </ScrollView>
-                </PTRView>
+                <AutoHeightImage style={{marginTop: hp(8)}} width={Metrics.logoWidth} source={Images.logo}/>
+                {/*<PTRView onRefresh={this.pull2Refresh} style={styles.scroll}>*/}
+                {/*</PTRView>*/}
                 <MySpinner visible={this.state.doingLoading} color={Colors.brandPrimary}/>
             </View>
         );
@@ -248,7 +161,7 @@ const styles = StyleSheet.create({
     container: {
         width: '100%',
         height: '100%',
-        // backgroundColor: '#311f36',
+        backgroundColor: '#311f36',
         flex: 1,
         flexDirection: 'column',
         alignItems: 'center',
@@ -262,23 +175,6 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center'
-    },
-    header: {
-        height: hp(10),
-        paddingTop: 0,
-    },
-    userRow: {
-        width: '100%',
-        flexDirection: "row",
-        alignItems: "center",
-        // justifyContent: 'center',
-        paddingBottom: Metrics.basePadding,
-        paddingLeft: Metrics.basePadding * 2,
-        paddingRight: Metrics.basePadding * 2,
-        paddingTop: Metrics.basePadding,
-    },
-    userImage: {
-        marginRight: Metrics.baseMargin,
     },
     scroll: {
         width: '100%',

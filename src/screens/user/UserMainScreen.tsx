@@ -52,7 +52,7 @@ class UserMainScreen extends React.Component<Props, State> {
 
     componentDidMount() {
         // this.animate();
-        this.getList();
+        // this.getList();
     };
 
     componentWillUnmount() {

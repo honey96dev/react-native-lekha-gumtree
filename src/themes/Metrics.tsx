@@ -1,5 +1,5 @@
 import {Dimensions, Platform} from 'react-native';
-import {heightPercentageToDP as hp} from "react-native-responsive-screen";
+import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 
 const { width, height } = Dimensions.get('window')
 const IS_ANDROID = Platform.OS === "android";
@@ -26,18 +26,19 @@ const metrics = {
   navBarHeight: Platform.OS === "ios" ? 48 : 48,
   buttonRadius: 4,
   icons: {
-    tiny: hp(1.6),
-    small: hp(2),
-    medium: hp(2.4),
-    large: hp(3.2),
-    xl: hp(5),
+    tiny: 16,
+    small: 20,
+    medium: 24,
+    large: 32,
+    xl: 50,
   },
   images: {
     small: hp(2.2),
     medium: hp(3.5),
     large: hp(5),
     logo: hp(25),
-  }
+  },
+  logoWidth: wp(60),
 };
 
 export default metrics

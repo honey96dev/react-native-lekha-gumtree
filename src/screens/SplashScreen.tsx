@@ -87,7 +87,7 @@ class SplashScreen extends React.Component<Props> {
         const opacity = this.animatedValue.interpolate({
             inputRange: [0, 0.5, 1],
             outputRange: [0, 1, 0]
-        })
+        });
         return (
             <TouchableWithoutFeedback
                 style={styles.container}

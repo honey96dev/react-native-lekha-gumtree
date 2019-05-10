@@ -1,5 +1,14 @@
 import React, {Component} from 'react';
-import {Alert, LayoutAnimation, StyleSheet, Text, UIManager, View} from 'react-native';
+import {
+    Alert,
+    Animated, Easing,
+    LayoutAnimation,
+    StyleSheet,
+    Text,
+    TouchableWithoutFeedback,
+    UIManager,
+    View
+} from 'react-native';
 import {NavigationScreenProps} from "react-navigation";
 import {Button} from 'react-native-elements';
 import Swiper from 'react-native-swiper';
@@ -25,6 +34,8 @@ interface MyProps {
 type Props = MyProps & NavigationScreenProps;
 
 interface State {
+    isSplash: boolean,
+    isLoading: boolean,
     hasLoggedInOnce: boolean,
     accessToken?: string,
     accessTokenExpirationDate?: string,
@@ -35,7 +46,10 @@ interface State {
 };
 
 export default class App extends Component<Props, State> {
+    private animatedValue: Animated.Value;
     state = {
+        isSplash: true,
+        isLoading: true,
         hasLoggedInOnce: false,
         accessToken: '',
         accessTokenExpirationDate: '',
@@ -43,6 +57,19 @@ export default class App extends Component<Props, State> {
         scopes: [],
         doingLoading: false,
         randomKey: 0,
+    };
+
+    constructor(props: Props) {
+        super(props);
+        this.animatedValue = new Animated.Value(0)
+    }
+
+    async componentDidMount() {
+        await this.performTimeConsumingTask();
+    };
+
+    componentWillUnmount() {
+
     };
 
     animateState(nextState: State | Pick<State, never> | null, delay: number = 0) {
@@ -60,7 +87,7 @@ export default class App extends Component<Props, State> {
             this.animateState({doingLoading: true});
             // const authState = await authorize(G.AppAuthConfig);
             let authState:AuthorizeResult = {
-                accessToken: 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYmYiOjE1NTc0ODM1OTEsImV4cCI6MTU1NzQ4NzE5MSwiaXNzIjoiaHR0cHM6Ly9pZGVudGl0eS5sZWtoYS5jb20uYXUvIiwiYXVkIjpbImh0dHBzOi8vaWRlbnRpdHkubGVraGEuY29tLmF1L3Jlc291cmNlcyIsInRlc3QtbW9iaWxlLWFwaSJdLCJjbGllbnRfaWQiOiJ0ZXN0LWFwcCIsInN1YiI6IjU4ODY1YjIxLTgyNWItNGIyYy04OWU0LTMxMzUxOTk4ZWNiOCIsImF1dGhfdGltZSI6MTU1NzQ4MzU5MCwiaWRwIjoibG9jYWwiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJyYW5qZWV0ZG90bWVAZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZ2l2ZW5uYW1lIjoiUmFuamVldCIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL3N1cm5hbWUiOiJTaW5naCIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWVpZGVudGlmaWVyIjoiNTg4NjViMjEtODI1Yi00YjJjLTg5ZTQtMzEzNTE5OThlY2I4Iiwic2NvcGUiOlsidGVzdC1tb2JpbGUtYXBpIl0sImFtciI6WyJwd2QiXX0.LURJ-1tlf4SBlGR2OhnExwhyTRA42x5VH5RsivPKFXBVebFfMNA1irPfs2exW_HOFjMwlbmbccinVEvb7aa-cxMu0gUpvf06a9HiHE7GrFg9LtBjY84BT9Pu-MVCrM1yIywdvyRv5DEwP5lR0BtFZBBtJfxkojtbJWmkhULEf6NZsB-op0EsBB3i23sEmwQysppDyaeuzgUBJP8xO-93Fg5RvRY3owVyOSqI0HLywyjX0I4hj1RPSwqeiPq1bfaMVFg7u5Ampwc17F8upIpgagiB0V6z4xGv2s5RWfOzY_Hkv0yJWAQCUjgbdhHLUTGPdQ9C_dxekWWQbhO2QuyoeQ',
+                accessToken: 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYmYiOjE1NTc0OTU0MjUsImV4cCI6MTU1NzQ5OTAyNSwiaXNzIjoiaHR0cHM6Ly9pZGVudGl0eS5sZWtoYS5jb20uYXUvIiwiYXVkIjpbImh0dHBzOi8vaWRlbnRpdHkubGVraGEuY29tLmF1L3Jlc291cmNlcyIsInRlc3QtbW9iaWxlLWFwaSJdLCJjbGllbnRfaWQiOiJ0ZXN0LWFwcCIsInN1YiI6IjU4ODY1YjIxLTgyNWItNGIyYy04OWU0LTMxMzUxOTk4ZWNiOCIsImF1dGhfdGltZSI6MTU1NzQ5NTQyNCwiaWRwIjoibG9jYWwiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJyYW5qZWV0ZG90bWVAZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZ2l2ZW5uYW1lIjoiUmFuamVldCIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL3N1cm5hbWUiOiJTaW5naCIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWVpZGVudGlmaWVyIjoiNTg4NjViMjEtODI1Yi00YjJjLTg5ZTQtMzEzNTE5OThlY2I4Iiwic2NvcGUiOlsidGVzdC1tb2JpbGUtYXBpIl0sImFtciI6WyJwd2QiXX0.M_DzBdtyzXA5XgkacWdDGer5TVISMNHlT8418ivocKmJ4jnzvot2vX60Fz8JhMy6hbYEiJIGeii4oFbFccchpU1am5nlVOFa2HrNfvkpOybxTW0ugBl01ObU2CEiu1GU4iuj2NbQO-CfYuXuNJtflodSTX4C00myla3-93h4dZyMMbtM_g6ae3aTUVBBqrwzARc2WIvgq4sdlO9VWHmNu6q3G2utoxuqz30F0srOqQK-dSmEAkxfLlOb7OArtr2xw2Lb7kepY9lKtkjg2BdOwezeGzcmWiiPhJQDPO7x6r_2p6rH_d84dvSbUJU-b3mRf7HYTQ8ZU874-w9avIp_Zg',
                 accessTokenExpirationDate: '',
                 idToken: '',
                 refreshToken: '',
@@ -110,6 +137,30 @@ export default class App extends Component<Props, State> {
         }
     };
 
+    performTimeConsumingTask = async () => {
+        return new Promise((resolve) =>
+            setTimeout(
+                () => {
+                    this.animate();
+                    this.setState({isLoading: false});
+                },
+                100
+            )
+        );
+    };
+
+    animate() {
+        this.animatedValue.setValue(0)
+        Animated.timing(
+            this.animatedValue,
+            {
+                toValue: 1,
+                duration: 2000,
+                easing: Easing.linear
+            }
+        ).start(() => this.animate());
+    }
+
     refresh = async () => {
         try {
             this.animateState({doingLoading: true});
@@ -154,12 +205,27 @@ export default class App extends Component<Props, State> {
 
     render() {
         const {state} = this;
+        const message = this.state.isLoading ? 'Loading...' : 'Tap Anywhere to continue';
+        const opacity = this.animatedValue.interpolate({
+            inputRange: [0, 0.5, 1],
+            outputRange: [0, 1, 0]
+        });
         const userProfile = G.UserProfile;
-        console.log(state);
         return (
             <View style={styles.mainDiv} key={state.randomKey}>
-                <AutoHeightImage width={wp(60)} source={Images.logo}/>
-                {!userProfile.firstName &&
+                <TouchableWithoutFeedback
+                    style={!!state.isSplash ? styles.container : undefined}
+                    onPress={() => !!state.isSplash && !state.isLoading && this.animateState({isSplash: false})}>
+                    <View style={styles.mainDiv}>
+                        <AutoHeightImage width={Metrics.logoWidth} source={Images.logo}/>
+                        {!!state.isSplash && (state.isLoading ?
+                            <Text style={styles.message}>{message}</Text> :
+                            <Animated.Text style={[styles.message, {opacity: opacity}]}>{message}</Animated.Text>)
+                        }
+                    </View>
+                </TouchableWithoutFeedback>
+                {/*{!state.isSplash && <AutoHeightImage width={Metrics.logoWidth} source={Images.logo}/>}*/}
+                {!state.isSplash && !userProfile.firstName &&
                 <View style={styles.sliderSec}>
                     <Swiper
                         showsButtons={false}
@@ -192,13 +258,13 @@ export default class App extends Component<Props, State> {
                             </Text>
                         </View>
                     </Swiper></View>}
-                {!!userProfile.firstName && <View>
+                {!state.isSplash && !!userProfile.firstName && <View>
                     <Text style={styles.headerText}>
                         Logged-In As
                     </Text>
                     <Text style={styles.descText}>{`${userProfile.firstName} ${userProfile.lastName}`}</Text>
                 </View>}
-                <View style={styles.buttonSec}>
+                {!state.isSplash && <View style={styles.buttonSec}>
                     {!userProfile.firstName &&
                     <Button
                         buttonStyle={[styles.buttonDefault, styles.signInButton]}
@@ -237,8 +303,8 @@ export default class App extends Component<Props, State> {
                         onPress={() => this.revoke()}
                         title={"Logout"}
                         titleStyle={[styles.buttonTextDefault, styles.createAccountButtonText]}/>}
-                </View>
-                <MySpinner visible={state.doingLoading} color={Colors.brandPrimary}/>
+                </View>}
+                {!state.isSplash && <MySpinner visible={state.doingLoading} color={Colors.brandPrimary}/>}
             </View>
         );
     }
@@ -250,9 +316,9 @@ const styles = StyleSheet.create({
         height: '100%',
         backgroundColor: '#311f36',
         flex: 1,
-        flexDirection: 'row',
+        flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'flex-start'
     },
     mainDiv: {
         width: '100%',
@@ -266,6 +332,11 @@ const styles = StyleSheet.create({
     canvas: {
         width: '60%',
         resizeMode: 'contain',
+    },
+    message: {
+        margin: 20,
+        color: '#fff',
+        fontSize: 20,
     },
     sliderSec: {
         marginTop: hp(5),

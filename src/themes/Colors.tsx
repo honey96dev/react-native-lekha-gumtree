@@ -52,6 +52,9 @@ const colors = {
   yellow: '#ffc700',
   lightBlack: '#111111',
   gray: '#d8d8d8',
+  tabBackground: '#e2e2e2',
+  tabActiveTint: '#1b9af7',
+  tabInactiveTint: '#8d8d8d',
 }
 
 export default colors

@@ -1,21 +1,20 @@
+import React from 'react';
 import {
     createAppContainer,
-    createSwitchNavigator,
-    createStackNavigator,
-    createBottomTabNavigator,
     createMaterialTopTabNavigator,
-    NavigationActions
+    createStackNavigator,
+    createSwitchNavigator
 } from "react-navigation";
-import {createMaterialBottomTabNavigator} from 'react-navigation-material-bottom-tabs';
 // @ts-ignore
 import {fadeIn} from 'react-navigation-transitions';
+import {Icon} from 'react-native-elements';
 import SplashScreen from '../screens/SplashScreen';
 import LoginScreen from '../screens/LoginScreen';
 import HomeScreen from '../screens/HomeScreen';
 import UserMainScreen from '../screens/user/UserMainScreen';
 import UserProfileScreen from '../screens/user/UserProfileScreen';
 import {setBaseURL} from "../apis";
-import {Colors} from "../themes";
+import {Colors, Metrics} from "../themes";
 
 // export enum NAVIGATE_STACKS {
 //     // RootMain = "RootMain",
@@ -37,12 +36,12 @@ export enum ROUTES {
 
 // The stack for the UserProfile
 const SplashStack = createSwitchNavigator({
-    [ROUTES.Splash]: {
-        screen: SplashScreen,
-        navigationOptions: {
-            header: null,
-        },
-    },
+    // [ROUTES.Splash]: {
+    //     screen: SplashScreen,
+    //     navigationOptions: {
+    //         header: null,
+    //     },
+    // },
     [ROUTES.Login]: {
         screen: LoginScreen,
         navigationOptions: {
@@ -86,27 +85,39 @@ const MainTab = createMaterialTopTabNavigator({
         screen: HomeStack,
         navigationOptions: {
             header: null,
+            tabBarLabel:"Home",
+            tabBarIcon: (color:any) => {
+                return (<Icon
+                    size={color.focused ? 26 : 24}
+                    type={"material"}
+                    name={"home"}
+                    color={color.focused ? Colors.tabActiveTint : Colors.tabInactiveTint}/>);
+            }
         },
     },
     [ROUTES.UserTab]: {
         screen: UserStack,
         navigationOptions: {
             header: null,
+            tabBarLabel:"Home",
+            tabBarIcon: (color:any) => {
+                return (<Icon
+                    size={color.focused ? 26 : 24}
+                    type={"material"}
+                    name={"account-circle"}
+                    color={color.focused ? Colors.tabActiveTint : Colors.tabInactiveTint}/>);
+            }
         },
     }
 }, {
-    // labeled: false,
-    // activeTintColor: Colors.loginBlue,
-    // inactiveTintColor: Colors.txtgrey,
-    // barStyle: {
-    //     backgroundColor: Colors.steel,
-    // }
     tabBarPosition: 'bottom',
     swipeEnabled: true,
     animationEnabled: true,
     tabBarOptions: {
-        activeTintColor: Colors.loginBlue,
-        inactiveTintColor: Colors.txtgrey,
+        showIcon: true,
+        showLabel: false,
+        activeTintColor: Colors.tabActiveTint,
+        inactiveTintColor: Colors.tabInactiveTint,
         style: {
             backgroundColor: Colors.steel,
         },
@@ -114,18 +125,28 @@ const MainTab = createMaterialTopTabNavigator({
             textAlign: 'center',
         },
         indicatorStyle: {
-            borderBottomColor: '#87B56A',
-            borderBottomWidth: 2,
+            borderBottomColor: Colors.brandPrimary,
+            borderBottomWidth: 3,
         },
     },
 });
 
 setBaseURL("https://mobileapi.lekha.com.au");
 
-export default createAppContainer(createSwitchNavigator(
+export default createAppContainer(createStackNavigator(
     {
-        [ROUTES.Splash]: {screen: SplashStack},
-        [ROUTES.Tab]: {screen: MainTab},
+        [ROUTES.Splash]: {
+            screen: SplashStack,
+            navigationOptions: {
+                header: null,
+            },},
+        [ROUTES.Tab]: {
+            screen: MainTab,
+            navigationOptions: {
+                header: null,
+            },},
+    }, {
+        transitionConfig: () => fadeIn(500)
     }
 ));
 
