@@ -31,6 +31,7 @@ const type = {
 
 const size = {
   button1: hp(2.2),
+  button2: hp(2),
   h1: hp(6),
   h2: 34,
   h3: hp(3.3),

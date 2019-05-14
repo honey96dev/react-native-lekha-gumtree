@@ -135,13 +135,13 @@ setBaseURL("https://mobileapi.lekha.com.au");
 
 export default createAppContainer(createStackNavigator(
     {
-        [ROUTES.Splash]: {
-            screen: SplashStack,
+        [ROUTES.Tab]: {
+            screen: MainTab,
             navigationOptions: {
                 header: null,
             },},
-        [ROUTES.Tab]: {
-            screen: MainTab,
+        [ROUTES.Splash]: {
+            screen: SplashStack,
             navigationOptions: {
                 header: null,
             },},

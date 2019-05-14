@@ -14,7 +14,7 @@ import InfoText from "../../components/InfoText";
 import BaseIcon from "../../components/BaseIcon";
 import SearchLocationModal from "./SearchLocationModal";
 import AvailabilityModal from "./AvailabilityModal";
-import {api_list, fetch, PUT} from "../../apis";
+import {api_list, fetch, POST, PUT} from "../../apis";
 import MySpinner from "../../components/MySpinner";
 
 UIManager.setLayoutAnimationEnabledExperimental &&
@@ -163,10 +163,21 @@ class UserProfileScreen extends React.Component<Props, State> {
                 console.log(err);
             })
             .finally(() => {
-                this.animateState({
-                    doingLoading: false
-                });
-                this.props.navigation.navigate(ROUTES.UserMain);
+                // console.log('profile.available', JSON.stringify(profile.available));
+                // @ts-ignore
+                fetch(POST, api_list.profileAvailable, profile.available)
+                    .then((response: any) => {
+                        console.log(response);
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
+                    .finally(() => {
+                        this.animateState({
+                            doingLoading: false
+                        });
+                        this.props.navigation.navigate(ROUTES.UserMain);
+                    });
             });
     };
 
@@ -454,7 +465,7 @@ const styles = StyleSheet.create({
         borderRadius: hp(1.5),
     },
     buttonTextDefault: {
-        fontFamily: Fonts.type.sfuiDisplayLight,
+        // fontFamily: Fonts.type.sfuiDisplayLight,
         fontSize: Fonts.size.button1,
         fontWeight: "400",
     },

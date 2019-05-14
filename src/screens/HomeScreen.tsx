@@ -43,7 +43,7 @@ interface State {
     address: AddressType,
     page: number,
     pageSize: number,
-    posts: PostListItem[],
+    gallery: PostListItem[],
     // isPublicKey: number;
 }
 
@@ -55,7 +55,7 @@ class HomeScreen extends React.Component<Props, State> {
         address: {},
         page: 1,
         pageSize: G.ListPageSize,
-        posts: [],
+        gallery: [],
         // isPublicKey: 0,
     };
 
@@ -143,7 +143,7 @@ class HomeScreen extends React.Component<Props, State> {
         fetch(GET, api_list.listing, {page: page, pageSize: pageSize})
             .then((response: any) => {
                 this.animateState({
-                    posts: response.result.results,
+                    gallery: response.result.results,
                     randomKey: Math.random(),
                     doingLoading: false,
                 });
@@ -175,7 +175,8 @@ class HomeScreen extends React.Component<Props, State> {
             firstName,
             lastName,
         } = G.UserProfile;
-        const posts = this.state.posts;
+        const {state} = this;
+        const posts = this.state.gallery;
         let avatar: string = "";
         if (firstName) {
             avatar += firstName.charAt(0).toUpperCase();
@@ -184,10 +185,10 @@ class HomeScreen extends React.Component<Props, State> {
             avatar += lastName.charAt(0).toUpperCase();
         }
         let address = this.getTextFromAddress();
-        console.log('posts', posts);
+        console.log('gallery', posts);
         return (
             <View style={styles.container} key={this.state.randomKey}>
-                <AutoHeightImage style={{marginTop: hp(8)}} width={Metrics.logoWidth} source={Images.logo}/>
+                <AutoHeightImage style={{marginTop: hp(3)}} width={Metrics.logoWidth} source={Images.logo}/>
                 <View style={{height: Fonts.size.h1,}}>
                 <SearchLocationModal
                     text={this.getTextFromAddress()}
@@ -225,8 +226,49 @@ class HomeScreen extends React.Component<Props, State> {
                         />
                     }
                 />
+                <Button
+                    type={"outline"}
+                    icon={{
+                        size: Metrics.icons.medium,
+                        type: 'material',
+                        name: 'add',
+                        color: Colors.brandPrimary,
+                    }}
+                    title={"Post New Ad"}
+                    buttonStyle={[styles.buttonDefault, styles.postNewAdButton]}
+                    titleStyle={[styles.buttonTextDefault, styles.postNewAdButtonText]}/>
+                <Button
+                    type={"clear"}
+                    title={"How it works?"}
+                    buttonStyle={[styles.buttonDefault, styles.howItWorkButton]}
+                    titleStyle={[styles.buttonTextDefault, styles.howItWorkButtonText]}/>
                 <PTRView onRefresh={this.pull2Refresh} style={styles.scroll}>
+                    <Text style={{padding: Metrics.basePadding, color: Colors.darktext, fontSize: Fonts.size.h5}}>Gallery</Text>
+                    <ScrollView style={styles.listContainer}>
+                        {state.gallery.map((item: PostListItem) => {
+
+                        })}
+                    </ScrollView>
                 </PTRView>
+                <View style={styles.bottomSec}>
+                    <View style={{flexDirection: "row", alignItems: "center",}}>
+                        <View style={styles.usersIcon}>
+                            <Icon size={Metrics.icons.xl} type={"simple-line-icon"} name={"people"}/>
+                        </View>
+                        <View>
+                            <Text style={{color: Colors.blacktxt, fontSize: Fonts.size.h5}}>We're here for you</Text>
+                            <Text style={{width: wp(75), color: Colors.darktext, fontSize: Fonts.size.h6}}>Need help? Our friendly team is here to assist you 24 * 7</Text>
+                        </View>
+                    </View>
+                    <View style={styles.separatorLine}/>
+                    {/*<View style={{flex: 1, flexDirection: 'column', alignItems: 'center',}}>*/}
+                        <Button
+                            type={"clear"}
+                            title={"Connect With Us"}
+                            buttonStyle={[styles.buttonDefault, styles.connectWithUsButton]}
+                            titleStyle={[styles.buttonTextDefault, styles.connectWithUsButtonText]}/>
+                    {/*</View>*/}
+                </View>
                 <MySpinner visible={this.state.doingLoading} color={Colors.brandPrimary}/>
             </View>
         );
@@ -260,8 +302,41 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.white,
         borderRadius: hp(2.5),
     },
+    buttonDefault: {
+        height: hp(4),
+        borderRadius: hp(2),
+    },
+    buttonTextDefault: {
+        marginStart: Metrics.baseMargin,
+        marginEnd: Metrics.baseMargin,
+        // fontFamily: Fonts.type.sfuiDisplayLight,
+        fontWeight: "200",
+    },
+    postNewAdButton: {
+        marginTop: Metrics.baseMargin,
+        backgroundColor: 'transparent',
+        borderWidth: StyleSheet.hairlineWidth,
+        borderColor: Colors.brandPrimary,
+    },
+    postNewAdButtonText: {
+        fontSize: Fonts.size.button2,
+        color: Colors.brandPrimary,
+    },
+    howItWorkButton: {
+        marginTop: Metrics.baseMargin,
+        backgroundColor: 'transparent',
+        // borderWidth: StyleSheet.hairlineWidth,
+        // borderColor: Colors.brandPrimary,
+    },
+    howItWorkButtonText: {
+        fontSize: Fonts.size.h6,
+        color: Colors.brandPrimary,
+    },
     scroll: {
-        width: '100%',
+        marginTop: Metrics.baseMargin,
+        marginBottom: Metrics.baseMargin,
+        width: Metrics.DEVICE_WIDTH - 2 * Metrics.baseMargin,
+        // borderRadius: Metrics.baseMargin,
         // height: hp(100) - Fonts.size.h1,
         backgroundColor: Colors.white,
     },
@@ -289,6 +364,38 @@ const styles = StyleSheet.create({
         marginBottom: 0,
         width: wp(30),
         height: hp(8),
+    },
+    bottomSec: {
+        marginBottom: Metrics.baseMargin,
+        width: Metrics.DEVICE_WIDTH - 2 * Metrics.baseMargin,
+        padding: Metrics.basePadding,
+        // borderRadius: Metrics.baseMargin,
+        backgroundColor: Colors.white,
+        // flex: 1,
+        // flexDirection: 'column',
+        // alignItems: 'center',
+    },
+    usersIcon: {
+        margin: Metrics.baseMargin,
+    },
+    separatorLine: {
+        marginTop: Metrics.baseMargin,
+        marginBottom: Metrics.baseMargin,
+        height: StyleSheet.hairlineWidth,
+        flex: 1,
+        borderWidth: StyleSheet.hairlineWidth,
+        borderColor: '#9B9FA4'
+    },
+    connectWithUsButton: {
+        // marginTop: Metrics.baseMargin,
+        // width: wp(50),
+        marginStart: wp(20),
+        marginEnd: wp(20),
+        backgroundColor: 'transparent',
+    },
+    connectWithUsButtonText: {
+        fontSize: Fonts.size.button1,
+        color: Colors.brandPrimary,
     },
 });
 

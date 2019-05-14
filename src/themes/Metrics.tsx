@@ -1,7 +1,7 @@
 import {Dimensions, Platform} from 'react-native';
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 
-const { width, height } = Dimensions.get('window')
+const { width, height } = Dimensions.get('window');
 const IS_ANDROID = Platform.OS === "android";
 
 // Used via Metrics.baseMargin

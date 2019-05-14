@@ -65,6 +65,38 @@ export interface PostListItem {
 }
 // let UserProfile: UserProfile = {};
 
+export interface GalleryItem {
+    recentStore?: number,
+    id?: string,
+    title: string,
+    description: string,
+    shiftTypeName?: string,
+    shifyTypeId?: number,
+    shiftDate?: string,
+    priceModelId?: number,
+    priceModelName?: string,
+    suburb?: string,
+    state?: string,
+    postCode?: string,
+    longitude?: number,
+    latitude?: number,
+    carTypeName?: string,
+    carTypeId?: number,
+    carMake?: string,
+    carModel?: string,
+    isPrestige?: boolean,
+    deactivatedAt?: string,
+    activatedAt?: string,
+    price?: number,
+    vendorNames?: string,
+    views?: number,
+    likesCount?: number,
+    isBookmarked?: boolean,
+    postedByName?: string,
+    postedByUserId?: string,
+    postedDate?: string,
+}
+
 export default class G {
     static ListPageSize = 50;
     static ListItemCountLimit = 100;

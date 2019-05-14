@@ -102,7 +102,7 @@ class UserMainScreen extends React.Component<Props, State> {
         fetch(GET, api_list.listing, {page: page, pageSize: pageSize})
             .then((response: any) => {
                 this.animateState({
-                    posts: response.result.results,
+                    gallery: response.result.results,
                     randomKey: Math.random(),
                     doingLoading: false,
                 });
@@ -143,7 +143,7 @@ class UserMainScreen extends React.Component<Props, State> {
             avatar += lastName.charAt(0).toUpperCase();
         }
         let address = this.getTextFromAddress();
-        console.log('posts', posts);
+        console.log('gallery', posts);
         return (
             <View style={styles.container} key={this.state.randomKey}>
                 <Header
