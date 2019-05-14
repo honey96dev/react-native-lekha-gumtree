@@ -5,13 +5,13 @@
 import React, {Component} from 'react';
 import _ from 'lodash';
 import {AddressType} from '../../tools/G';
-import {Input, ListItem, Text} from 'react-native-elements';
+import {Icon, Input, ListItem, Text} from 'react-native-elements';
 import {Modal, ScrollView, StyleSheet, View} from 'react-native';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 import {Colors, Fonts, Metrics} from "../../themes";
 import BaseIcon from "../../components/BaseIcon";
-import SearchLocations from '../../tools/LocationApi';
+import {api_list, fetch, GET} from "../../apis";
 
 interface Props {
     trigger: 'onFocus' | 'onPress',
@@ -68,13 +68,28 @@ export default class SearchLocationModal extends Component<Props, State> {
     _searchLocations = () => {
         // console.log('searchLocations', this.state.text);
         if (!!this.state.text && this.state.text.length > 2) {
-            let searchedAddresses = SearchLocations(this.state.text);
-            // console.log('searchLocations', searchedAddresses);
-            this.setState({ searchedAddresses: searchedAddresses });
+            // @ts-ignore
+            fetch(GET, api_list.searchLocation, {keyword: this.state.text})
+                .then((response: any) => {
+                    this.setState({
+                        searchedAddresses: response.result,
+                    });
+                    // console.log('this.state.searchedAddresses', this.state.searchedAddresses);
+                })
+                .catch(err => {
+                    console.log(err);
+                    // this.setState({
+                    //     doingLoading: false,
+                    // });
+                });
+            // let searchedAddresses = SearchLocations(this.state.text);
+            // // console.log('searchLocations', searchedAddresses);
+            // this.setState({ searchedAddresses: searchedAddresses });
         }
     };
 
     getTextFromAddress = (address: AddressType) => {
+        console.log(address);
         let items = [];
         if (!!address.suburb) {
             items.push(address.suburb);
@@ -141,12 +156,20 @@ export default class SearchLocationModal extends Component<Props, State> {
                                     value={this.state.text}
                                     containerStyle={styles.searchBoxContainer}
                                     inputContainerStyle={styles.searchBoxInner}
-                                    inputStyle={{color: Colors.white}}
+                                    // inputStyle={{color: Colors.white}}
                                     placeholder="Search..."
+                                    leftIcon={
+                                        <Icon
+                                            size={Metrics.icons.large}
+                                            type={'material'}
+                                            name={'search'}
+                                            color={Colors.brandPrimary}
+                                        />
+                                    }
                                     rightIcon={!!this.state.text
                                         ? <BaseIcon
                                             containerStyle={{
-                                                backgroundColor: Colors.transparent,
+                                                backgroundColor: Colors.brandPrimary,
                                                 height: hp(2.8),
                                                 width: hp(2.8),
                                                 borderRadius: hp(1.4),
@@ -154,7 +177,7 @@ export default class SearchLocationModal extends Component<Props, State> {
                                                 marginStart: 0,
                                                 marginEnd: 0,
                                             }}
-                                            icon={{type: "material", name: "close", color: Colors.white}}
+                                            icon={{size: Metrics.icons.small,type: "material", name: "close", color: Colors.white}}
                                             onPress={() => this.setState({text: ''})}
                                             // style={{ height: hp(4), marginLeft: Metrics.baseMargin}}
                                         /> : undefined}
@@ -166,7 +189,7 @@ export default class SearchLocationModal extends Component<Props, State> {
                                 {/*<View style={styles.list}>*/}
                                     {/*<List>*/}
                                         {searchedAddresses.map((result: any) => {
-                                            const item = result.item;
+                                            const item = result;
                                             const text = this.getTextFromAddress(item);
                                             return (<ListItem
                                                 title={text}
@@ -207,14 +230,18 @@ const styles = StyleSheet.create({
         paddingEnd: Metrics.basePadding,
     },
     searchBoxContainer: {
+        marginTop: hp(0.5),
         height: hp(5),
-        // backgroundColor: Colors.white,
+        paddingStart: 0,
+        backgroundColor: Colors.white,
+        borderRadius: hp(2.5),
         // paddingStart: 0,
         // paddingEnd: 0,
         // marginEnd: wp(10),
     },
     searchBoxInner: {
-        marginTop: hp(1),
+        marginTop: hp(0.25),
+        borderBottomWidth: 0,
     },
     listContainer: {
         width: '100%',

@@ -20,7 +20,6 @@ import {heightPercentageToDP as hp, widthPercentageToDP as wp} from 'react-nativ
 import PTRView from 'react-native-pull-to-refresh';
 import {Colors, Fonts, Metrics} from "../themes";
 import {ROUTES} from "../routes";
-import BaseIcon from "../components/BaseIcon";
 import G, {AddressType, PostListItem} from "../tools/G";
 import {api_list, fetch, GET, PUT} from "../apis";
 import MySpinner from "../components/MySpinner";
@@ -218,6 +217,7 @@ class HomeScreen extends React.Component<Props, State> {
                     containerStyle={styles.searchBox}
                     inputContainerStyle={{borderBottomWidth: 0,}}
                     placeholder='Search...'
+                    // editable={false}
                     leftIcon={
                         <Icon
                             size={Metrics.icons.large}
@@ -244,11 +244,11 @@ class HomeScreen extends React.Component<Props, State> {
                     titleStyle={[styles.buttonTextDefault, styles.howItWorkButtonText]}/>
                 <PTRView onRefresh={this.pull2Refresh} style={styles.scroll}>
                     <Text style={{padding: Metrics.basePadding, color: Colors.darktext, fontSize: Fonts.size.h5}}>Gallery</Text>
-                    <ScrollView style={styles.listContainer}>
-                        {state.gallery.map((item: PostListItem) => {
+                    {/*<ScrollView style={styles.listContainer}>*/}
+                        {/*{state.gallery.map((item: PostListItem) => {*/}
 
-                        })}
-                    </ScrollView>
+                        {/*})}*/}
+                    {/*</ScrollView>*/}
                 </PTRView>
                 <View style={styles.bottomSec}>
                     <View style={{flexDirection: "row", alignItems: "center",}}>

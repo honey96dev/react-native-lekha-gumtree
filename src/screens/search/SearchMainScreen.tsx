@@ -34,7 +34,7 @@ interface State {
     // isPublicKey: number;
 }
 
-class UserMainScreen extends React.Component<Props, State> {
+class SearchMainScreen extends React.Component<Props, State> {
     // private animatedValue: Animated.Value;
     state = {
         doingLoading: false,
@@ -52,7 +52,7 @@ class UserMainScreen extends React.Component<Props, State> {
     }
 
     componentDidMount() {
-        this.getList();
+        // this.getList();
     };
 
     componentWillUnmount() {
@@ -335,5 +335,5 @@ const styles = StyleSheet.create({
     },
 });
 
-export default UserMainScreen;
+export default SearchMainScreen;
 

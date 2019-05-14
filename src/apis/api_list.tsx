@@ -11,6 +11,7 @@ export const api_list = {
     profileBookmarks: "api/profile/bookmarks",
     profileAvailable: "api/profile/available",
     search: "api/search",
+    searchLocation: "api/search/location",
     searchGallery: "api/search/gallery",
     systemRefdata: "api/system/refdata"
 };
