@@ -26,8 +26,10 @@
     "flow": "flow"
   },
   "dependencies": {
+    "@ptomasroos/react-native-multi-slider": "^1.0.0",
     "@types/lodash": "^4.14.123",
     "@types/react-navigation-material-bottom-tabs": "^0.3.1",
+    "@types/sprintf-js": "^1.1.2",
     "axios": "^0.18.0",
     "fuse.js": "^3.4.4",
     "lodash": "^4.17.11",
@@ -42,6 +44,7 @@
     "react-native-gesture-handler": "^1.2.1",
     "react-native-loading-spinner-overlay": "^1.0.1",
     "react-native-paper": "^2.15.2",
+    "react-native-picker": "^4.3.7",
     "react-native-pull-to-refresh": "^2.1.3",
     "react-native-responsive-screen": "^1.2.2",
     "react-native-spinkit": "^1.2.0",
@@ -49,7 +52,8 @@
     "react-native-vector-icons": "^6.4.2",
     "react-navigation": "^3.9.1",
     "react-navigation-material-bottom-tabs": "^1.0.0",
-    "react-navigation-transitions": "^1.0.10"
+    "react-navigation-transitions": "^1.0.10",
+    "sprintf-js": "^1.1.2"
   },
   "devDependencies": {
     "@babel/core": "^7.4.4",

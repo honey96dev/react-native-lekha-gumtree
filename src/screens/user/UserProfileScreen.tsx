@@ -307,10 +307,10 @@ class UserProfileScreen extends React.Component<Props, State> {
                         rightIcon={
                             <View
                                 style={{
-                                    flex: 1,
+                                    // flex: 1,
                                     height: 15,
                                     justifyContent: "center",
-                                    alignItems: "flex-end"
+                                    // alignItems: "flex-end"
                                 }}
                             >
                                 <SearchLocationModal
@@ -319,7 +319,7 @@ class UserProfileScreen extends React.Component<Props, State> {
                                     onCancel={() => console.log("On Cancel")}
                                     onSelected={this.onLocationSelected}
                                 >
-                                    <Text style={{color: "#43484d", width: wp(30)}}>
+                                    <Text style={{color: "#43484d"}}>
                                         {this.getAddressText()}
                                     </Text>
                                 </SearchLocationModal>

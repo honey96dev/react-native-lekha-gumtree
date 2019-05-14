@@ -2,7 +2,7 @@ import React from 'react';
 import {LayoutAnimation, ScrollView, StyleSheet, Text, UIManager, View} from 'react-native';
 import {NavigationScreenProps} from "react-navigation";
 // @ts-ignore
-import {Avatar, Button, Header, Icon, ListItem} from "react-native-elements";
+import {Avatar, Button, Header, Icon, Input, ListItem} from "react-native-elements";
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from 'react-native-responsive-screen';
 // @ts-ignore
 // import Spinner from 'react-native-loading-spinner-overlay';
@@ -28,6 +28,7 @@ type Props = MyProps & NavigationScreenProps;
 interface State {
     doingLoading: boolean,
     randomKey: number,
+    text: string,
     page: number,
     pageSize: number,
     posts: PostListItem[],
@@ -35,10 +36,17 @@ interface State {
 }
 
 class SearchMainScreen extends React.Component<Props, State> {
+    static carType: string = 'All';
+    static shiftType: string = 'All';
+    static date: string = 'All';
+    static priceModel: string = 'All';
+    static minPrice: number = 0;
+    static maxPrice: number = 1000;
     // private animatedValue: Animated.Value;
     state = {
         doingLoading: false,
         randomKey: 0,
+        text: '',
         page: 1,
         pageSize: G.ListPageSize,
         posts: [],
@@ -83,6 +91,10 @@ class SearchMainScreen extends React.Component<Props, State> {
         return items.join(', ');
     };
 
+    onChange = (text:string) => {
+        this.setState({text: text});
+    };
+
     pull2Refresh = () => {
         let {page, pageSize} = this.state;
         if (page > 1) {
@@ -93,13 +105,13 @@ class SearchMainScreen extends React.Component<Props, State> {
     };
 
     getList = () => {
-        const {page, pageSize} = this.state;
+        const {text, page, pageSize} = this.state;
         this.animateState({
             doingLoading: true
         });
         console.log('page-pageSize', page, pageSize);
         // @ts-ignore
-        fetch(GET, api_list.listing, {page: page, pageSize: pageSize})
+        fetch(GET, api_list.search, {Keyword: text, Page: page, PageSize: pageSize})
             .then((response: any) => {
                 console.log(response);
                 this.animateState({
@@ -147,39 +159,59 @@ class SearchMainScreen extends React.Component<Props, State> {
         console.log('posts', posts);
         return (
             <View style={styles.container} key={this.state.randomKey}>
-                <Header
-                    containerStyle={styles.header}
-                    backgroundColor={Colors.brandPrimary}
-                    leftComponent={
-                        <View style={{width: hp(70), paddingLeft: Metrics.basePadding, flexDirection: "row", alignItems: "center",}}>
-                            <Avatar containerStyle={{marginRight: Metrics.baseMargin}} size="large" rounded title={avatar}/>
-                            <View>
-                                {(!!firstName || !!lastName) && <Text style={{fontSize: Fonts.size.h5, color: Colors.white,}}>
-                                    {firstName} {lastName}
-                                </Text>}
-                                {!!address && <Text style={{fontSize: Fonts.size.regular, color: Colors.white, }}>{address}</Text>}
-                            </View>
-                        </View>
-                    }
-                    rightComponent={
-                        <BaseIcon
-                            containerStyle={{
-                                backgroundColor: Colors.transparent,
-                                height: hp(6),
-                                width: hp(6),
-                                borderRadius: hp(2),
-                                // marginTop: hp(1),
-                                marginEnd: 0,
-                            }}
-                            icon={{
-                                size: Metrics.icons.xl,
-                                type: "material",
-                                name: "settings",
-                                color: Colors.white}}
-                            onPress={() => this.props.navigation.navigate(ROUTES.UserProfile)}
-                            // style={{ height: hp(4), marginLeft: Metrics.baseMargin}}
-                        />}
-                />
+                <View style={styles.searchRow}>
+                    <Input
+                        // ref={(input: Input) => input && input._root.focus()}
+                        autoCorrect={false}
+                        onChangeText={this.onChange}
+                        value={this.state.text}
+                        containerStyle={styles.searchBoxContainer}
+                        inputContainerStyle={styles.searchBoxInner}
+                        // inputStyle={{color: Colors.white}}
+                        placeholder="Search..."
+                        leftIcon={
+                            <Icon
+                                size={Metrics.icons.large}
+                                type={'material'}
+                                name={'search'}
+                                color={Colors.brandPrimary}
+                            />
+                        }
+                        rightIcon={!!this.state.text
+                            ? <BaseIcon
+                                containerStyle={{
+                                    backgroundColor: Colors.brandPrimary,
+                                    height: hp(2.8),
+                                    width: hp(2.8),
+                                    borderRadius: hp(1.4),
+                                    // marginTop: hp(1),
+                                    marginStart: 0,
+                                    marginEnd: 0,
+                                }}
+                                icon={{size: Metrics.icons.small,type: "material", name: "close", color: Colors.white}}
+                                onPress={() => this.setState({text: ''})}
+                                // style={{ height: hp(4), marginLeft: Metrics.baseMargin}}
+                            /> : undefined}
+                    />
+                    <BaseIcon
+                        containerStyle={{
+                            backgroundColor: Colors.brandPrimary,
+                            height: hp(4),
+                            width: hp(4),
+                            borderRadius: hp(2),
+                            marginTop: hp(1),
+                            marginEnd: 0,
+                        }}
+                        icon={{
+                            size: Metrics.icons.large,
+                            type: "material",
+                            name: "menu",
+                            color: Colors.white}}
+                        onPress={() => this.props.navigation.navigate(ROUTES.SearchFilter)}
+                        // style={{ height: hp(4), marginLeft: Metrics.baseMargin}}
+                    />
+                    {/*</InputGroup>*/}
+                </View>
                 <PTRView onRefresh={this.pull2Refresh} style={styles.scroll}>
                     <ScrollView contentContainerStyle={styles.listContainer}>
                         {posts.map((item: PostListItem) => {
@@ -276,22 +308,45 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center'
     },
-    header: {
-        height: hp(10),
-        paddingTop: 0,
-    },
-    userRow: {
+    searchRow: {
         width: '100%',
+        height: Fonts.size.h1,
         flexDirection: "row",
-        alignItems: "center",
-        // justifyContent: 'center',
-        paddingBottom: Metrics.basePadding,
-        paddingLeft: Metrics.basePadding * 2,
-        paddingRight: Metrics.basePadding * 2,
-        paddingTop: Metrics.basePadding,
+        paddingStart: Metrics.basePadding,
+        paddingEnd: Metrics.basePadding,
+        backgroundColor: Colors.brandPrimary,
     },
-    userImage: {
-        marginRight: Metrics.baseMargin,
+    // header: {
+    //     height: hp(10),
+    //     paddingTop: 0,
+    // },
+    // userRow: {
+    //     width: '100%',
+    //     flexDirection: "row",
+    //     alignItems: "center",
+    //     // justifyContent: 'center',
+    //     paddingBottom: Metrics.basePadding,
+    //     paddingLeft: Metrics.basePadding * 2,
+    //     paddingRight: Metrics.basePadding * 2,
+    //     paddingTop: Metrics.basePadding,
+    // },
+    // userImage: {
+    //     marginRight: Metrics.baseMargin,
+    // },
+    searchBoxContainer: {
+        marginTop: hp(0.5),
+        width: '91%',
+        height: hp(5),
+        paddingStart: 0,
+        backgroundColor: Colors.white,
+        borderRadius: hp(2.5),
+        // paddingStart: 0,
+        // paddingEnd: 0,
+        // marginEnd: wp(10),
+    },
+    searchBoxInner: {
+        marginTop: hp(0.25),
+        borderBottomWidth: 0,
     },
     scroll: {
         width: '100%',

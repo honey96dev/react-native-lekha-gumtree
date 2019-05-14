@@ -8,13 +8,14 @@ import {
 // @ts-ignore
 import {fadeIn} from 'react-navigation-transitions';
 import {Icon} from 'react-native-elements';
-import SplashScreen from '../screens/SplashScreen';
 import LoginScreen from '../screens/LoginScreen';
 import HomeScreen from '../screens/HomeScreen';
+import SearchMainScreen from '../screens/search/SearchMainScreen';
+import SearchFilterScreen from '../screens/search/SearchFilterScreen';
 import UserMainScreen from '../screens/user/UserMainScreen';
 import UserProfileScreen from '../screens/user/UserProfileScreen';
 import {setBaseURL} from "../apis";
-import {Colors, Metrics} from "../themes";
+import {Colors} from "../themes";
 
 // export enum NAVIGATE_STACKS {
 //     // RootMain = "RootMain",
@@ -27,9 +28,12 @@ export enum ROUTES {
     Splash = "Splash",
     Login = "Login",
     Tab = "Tab",
-    HomeTab = "HomeTab",
-    UserTab = "UserTab",
+    HomeStack = "HomeStack",
+    SearchStack = "SearchStack",
+    UserStack = "UserStack",
     Home = "Home",
+    SearchMain = "SearchMain",
+    SearchFilter = "SearchFilter",
     UserMain = "UserMain",
     UserProfile = "UserProfile",
 }
@@ -55,21 +59,35 @@ const SplashStack = createSwitchNavigator({
     //     }
     // },
 });
-const HomeStack = createStackNavigator({
-    [ROUTES.Home]: {
-        screen: HomeScreen,
+// const HomeStack = createStackNavigator({
+//     // [ROUTES.Home]: {
+//     //     screen: HomeScreen,
+//     //     navigationOptions: {
+//     //         header: null,
+//     //     },
+//     // },
+// });
+const SearchStack = createStackNavigator({
+    // [ROUTES.SearchMain]: {
+    //     screen: SearchMainScreen,
+    //     navigationOptions: {
+    //         header: null,
+    //     },
+    // },
+    [ROUTES.SearchFilter]: {
+        screen: SearchFilterScreen,
         navigationOptions: {
             header: null,
         },
     },
 });
 const UserStack = createStackNavigator({
-    [ROUTES.UserMain]: {
-        screen: UserMainScreen,
-        navigationOptions: {
-            header: null,
-        },
-    },
+    // [ROUTES.UserMain]: {
+    //     screen: UserMainScreen,
+    //     navigationOptions: {
+    //         header: null,
+    //     },
+    // },
     [ROUTES.UserProfile]: {
         screen: UserProfileScreen,
         navigationOptions: {
@@ -81,8 +99,8 @@ const UserStack = createStackNavigator({
 });
 
 const MainTab = createMaterialTopTabNavigator({
-    [ROUTES.HomeTab]: {
-        screen: HomeStack,
+    [ROUTES.Home]: {
+        screen: HomeScreen,
         navigationOptions: {
             header: null,
             tabBarLabel:"Home",
@@ -95,8 +113,22 @@ const MainTab = createMaterialTopTabNavigator({
             }
         },
     },
-    [ROUTES.UserTab]: {
-        screen: UserStack,
+    [ROUTES.SearchMain]: {
+        screen: SearchMainScreen,
+        navigationOptions: {
+            header: null,
+            tabBarLabel:"Search",
+            tabBarIcon: (color:any) => {
+                return (<Icon
+                    size={color.focused ? 26 : 24}
+                    type={"material"}
+                    name={"search"}
+                    color={color.focused ? Colors.tabActiveTint : Colors.tabInactiveTint}/>);
+            }
+        },
+    },
+    [ROUTES.UserMain]: {
+        screen: UserMainScreen,
         navigationOptions: {
             header: null,
             tabBarLabel:"Home",
@@ -135,13 +167,23 @@ setBaseURL("https://mobileapi.lekha.com.au");
 
 export default createAppContainer(createStackNavigator(
     {
+        [ROUTES.Splash]: {
+            screen: SplashStack,
+            navigationOptions: {
+                header: null,
+            },},
         [ROUTES.Tab]: {
             screen: MainTab,
             navigationOptions: {
                 header: null,
             },},
-        [ROUTES.Splash]: {
-            screen: SplashStack,
+        [ROUTES.SearchStack]: {
+            screen: SearchStack,
+            navigationOptions: {
+                header: null,
+            },},
+        [ROUTES.UserStack]: {
+            screen: UserStack,
             navigationOptions: {
                 header: null,
             },},
