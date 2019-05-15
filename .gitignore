@@ -78,3 +78,4 @@ typings/
 android/
 ios/
 yarn.lock
+.DS_Store
