@@ -55,9 +55,12 @@ interface State {
     priceModels: PriceModel[],
     shiftTypes: ShiftType[],
     carType: string|number,
+    carTypeId: number,
     priceModel: string|number,
+    priceModelId: number,
     // priceModelIdx: number,
     shiftType: string|number,
+    shiftTypeId: number,
     date: string,
     minPrice: number,
     maxPrice: number,
@@ -73,9 +76,12 @@ class SearchFilterScreen extends React.Component<Props, State> {
         priceModels: [],
         shiftTypes: [],
         carType: 'All',
+        carTypeId: -1,
         priceModel: 'All',
+        priceModelId: -1,
         // priceModelIdx: 0,
         shiftType: 'All',
+        shiftTypeId: -1,
         date: 'All',
         minPrice: 0,
         maxPrice: 1000,
@@ -136,9 +142,12 @@ class SearchFilterScreen extends React.Component<Props, State> {
                     // priceModelIdx: priceModelIdx,
                     shiftTypes: data.shiftTypes,
                     carType: SearchMainScreen.carType,
+                    carTypeId: SearchMainScreen.carTypeId,
                     shiftType: SearchMainScreen.shiftType,
+                    shiftTypeId: SearchMainScreen.shiftTypeId,
                     date: SearchMainScreen.date,
                     priceModel: SearchMainScreen.priceModel,
+                    priceModelId: SearchMainScreen.priceModelId,
                     minPrice: SearchMainScreen.minPrice,
                     maxPrice: SearchMainScreen.maxPrice,
                 });
@@ -148,9 +157,12 @@ class SearchFilterScreen extends React.Component<Props, State> {
                 this.animateState({
                     doingLoading: false,
                     carType: SearchMainScreen.carType,
+                    carTypeId: SearchMainScreen.carTypeId,
                     shiftType: SearchMainScreen.shiftType,
+                    shiftTypeId: SearchMainScreen.shiftTypeId,
                     date: SearchMainScreen.date,
                     priceModel: SearchMainScreen.priceModel,
+                    priceModelId: SearchMainScreen.priceModelId,
                     minPrice: SearchMainScreen.minPrice,
                     maxPrice: SearchMainScreen.maxPrice,
                 });
@@ -158,11 +170,14 @@ class SearchFilterScreen extends React.Component<Props, State> {
     };
 
     saveFilters = () => {
-        const {carType, shiftType, date, priceModel, minPrice, maxPrice} = this.state;
+        const {carType, carTypeId, shiftType, shiftTypeId, date, priceModel, priceModelId, minPrice, maxPrice} = this.state;
         SearchMainScreen.carType = carType;
+        SearchMainScreen.carTypeId = carTypeId;
         SearchMainScreen.shiftType = shiftType;
+        SearchMainScreen.shiftTypeId = shiftTypeId;
         SearchMainScreen.date = date;
         SearchMainScreen.priceModel = priceModel;
+        SearchMainScreen.priceModelId = priceModelId;
         SearchMainScreen.minPrice = minPrice;
         SearchMainScreen.maxPrice = maxPrice;
         this.props.navigation.navigate(ROUTES.SearchMain);

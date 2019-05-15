@@ -189,42 +189,62 @@ class HomeScreen extends React.Component<Props, State> {
             <View style={styles.container} key={this.state.randomKey}>
                 <AutoHeightImage style={{marginTop: hp(3)}} width={Metrics.logoWidth} source={Images.logo}/>
                 <View style={{height: Fonts.size.h1,}}>
-                <SearchLocationModal
-                    text={this.getTextFromAddress()}
-                    trigger={'onPress'}
-                    onSelected={this.onLocationSelected}
-                    onCancel={() => {
-                    }}>
-                    <TouchableWithoutFeedback>
-                        <View style={{
-                            // width: wp(65),
-                            margin: Metrics.baseMargin,
-                            flexDirection: 'row',
-                            alignItems: 'center',
+                    <SearchLocationModal
+                        text={this.getTextFromAddress()}
+                        trigger={'onPress'}
+                        onSelected={this.onLocationSelected}
+                        onCancel={() => {
                         }}>
-                            <Icon size={Metrics.icons.large} type={"material"} name={"near-me"} color={Colors.white}/>
-                            <Text
-                                style={{
-                                    marginStart: wp(2),
-                                    fontSize: Fonts.size.h6,
-                                    color: Colors.white
-                                }}>{address}</Text>
-                        </View>
-                    </TouchableWithoutFeedback>
-                </SearchLocationModal>
+                        <TouchableWithoutFeedback>
+                            <View style={{
+                                // width: wp(65),
+                                margin: Metrics.baseMargin,
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                            }}>
+                                <Icon size={Metrics.icons.large} type={"material"} name={"near-me"}
+                                      color={Colors.white}/>
+                                <Text
+                                    style={{
+                                        marginStart: wp(2),
+                                        fontSize: Fonts.size.h6,
+                                        color: Colors.white
+                                    }}>{address}</Text>
+                            </View>
+                        </TouchableWithoutFeedback>
+                    </SearchLocationModal>
                 </View>
-                <Input
-                    containerStyle={styles.searchBox}
-                    inputContainerStyle={{borderBottomWidth: 0,}}
-                    placeholder='Search...'
+                {/*<Input*/}
+                    {/*containerStyle={styles.searchBox}*/}
+                    {/*inputContainerStyle={{borderBottomWidth: 0,}}*/}
+                    {/*placeholder='Search...'*/}
+                    {/*editable={false}*/}
+                    {/*leftIcon={*/}
+                        {/*<Icon*/}
+                            {/*size={Metrics.icons.large}*/}
+                            {/*type={'material'}*/}
+                            {/*name={'search'}*/}
+                        {/*/>*/}
+                    {/*}*/}
+                    {/*// onTouchEnd={() => this.props.navigation.navigate(ROUTES.SearchMain)}*/}
+                    {/*onPress={() => this.props.navigation.navigate(ROUTES.SearchMain)}*/}
+                {/*/>*/}
+                <Button
+                    buttonStyle={styles.searchBox}
+                    titleStyle={{color: Colors.darktext}}
+                    // inputContainerStyle={{borderBottomWidth: 0,}}
+                    title='Search...'
                     // editable={false}
-                    leftIcon={
+                    icon={
                         <Icon
                             size={Metrics.icons.large}
                             type={'material'}
                             name={'search'}
+                            color={Colors.brandPrimary}
                         />
                     }
+                    // onTouchEnd={() => this.props.navigation.navigate(ROUTES.SearchMain)}
+                    onPress={() => this.props.navigation.navigate(ROUTES.SearchMain)}
                 />
                 <Button
                     type={"outline"}
@@ -243,11 +263,15 @@ class HomeScreen extends React.Component<Props, State> {
                     buttonStyle={[styles.buttonDefault, styles.howItWorkButton]}
                     titleStyle={[styles.buttonTextDefault, styles.howItWorkButtonText]}/>
                 <PTRView onRefresh={this.pull2Refresh} style={styles.scroll}>
-                    <Text style={{padding: Metrics.basePadding, color: Colors.darktext, fontSize: Fonts.size.h5}}>Gallery</Text>
+                    <Text style={{
+                        padding: Metrics.basePadding,
+                        color: Colors.darktext,
+                        fontSize: Fonts.size.h5
+                    }}>Gallery</Text>
                     {/*<ScrollView style={styles.listContainer}>*/}
-                        {/*{state.gallery.map((item: PostListItem) => {*/}
+                    {/*{state.gallery.map((item: PostListItem) => {*/}
 
-                        {/*})}*/}
+                    {/*})}*/}
                     {/*</ScrollView>*/}
                 </PTRView>
                 <View style={styles.bottomSec}>
@@ -257,16 +281,17 @@ class HomeScreen extends React.Component<Props, State> {
                         </View>
                         <View>
                             <Text style={{color: Colors.blacktxt, fontSize: Fonts.size.h5}}>We're here for you</Text>
-                            <Text style={{width: wp(75), color: Colors.darktext, fontSize: Fonts.size.h6}}>Need help? Our friendly team is here to assist you 24 * 7</Text>
+                            <Text style={{width: wp(75), color: Colors.darktext, fontSize: Fonts.size.h6}}>Need help?
+                                Our friendly team is here to assist you 24 * 7</Text>
                         </View>
                     </View>
                     <View style={styles.separatorLine}/>
                     {/*<View style={{flex: 1, flexDirection: 'column', alignItems: 'center',}}>*/}
-                        <Button
-                            type={"clear"}
-                            title={"Connect With Us"}
-                            buttonStyle={[styles.buttonDefault, styles.connectWithUsButton]}
-                            titleStyle={[styles.buttonTextDefault, styles.connectWithUsButtonText]}/>
+                    <Button
+                        type={"clear"}
+                        title={"Connect With Us"}
+                        buttonStyle={[styles.buttonDefault, styles.connectWithUsButton]}
+                        titleStyle={[styles.buttonTextDefault, styles.connectWithUsButtonText]}/>
                     {/*</View>*/}
                 </View>
                 <MySpinner visible={this.state.doingLoading} color={Colors.brandPrimary}/>
@@ -298,9 +323,11 @@ const styles = StyleSheet.create({
         marginBottom: Metrics.baseMargin,
         width: wp(80),
         height: hp(5),
-        paddingLeft: 0,
+        paddingStart: Metrics.basePadding,
+        // paddingStart: 0,
         backgroundColor: Colors.white,
         borderRadius: hp(2.5),
+        justifyContent: 'flex-start',
     },
     buttonDefault: {
         height: hp(4),

@@ -4,6 +4,7 @@ import {NavigationScreenProps} from "react-navigation";
 // @ts-ignore
 import {Avatar, Button, Header, Icon, Input, ListItem} from "react-native-elements";
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from 'react-native-responsive-screen';
+import _ from 'lodash';
 // @ts-ignore
 // import Spinner from 'react-native-loading-spinner-overlay';
 // @ts-ignore
@@ -35,11 +36,26 @@ interface State {
     // isPublicKey: number;
 }
 
+interface SearchParams {
+    Keyword?: any,
+    Page?: number,
+    PageSize?: number,
+    CarTypeId?: number,
+    ShiftTypeId?: number,
+    ShiftDate?: string,
+    PriceModelId?: number,
+    PriceMin?: number,
+    PriceMax?: number,
+}
+
 class SearchMainScreen extends React.Component<Props, State> {
     static carType: string = 'All';
+    static carTypeId: number = -1;
     static shiftType: string = 'All';
+    static shiftTypeId: number = -1;
     static date: string = 'All';
     static priceModel: string = 'All';
+    static priceModelId: number = -1;
     static minPrice: number = 0;
     static maxPrice: number = 1000;
     // private animatedValue: Animated.Value;
@@ -52,15 +68,18 @@ class SearchMainScreen extends React.Component<Props, State> {
         posts: [],
         // isPublicKey: 0,
     };
+    private getList: (() => void);
 
     constructor(props: Props) {
         super(props);
         // this.animatedValue = new Animated.Value(0);
         // console.log(G.UserProfile);
+        const _this = this;
+        this.getList = _.debounce(_this._getList, 500);
     }
 
     componentDidMount() {
-        // this.getList();
+        this.getList();
     };
 
     componentWillUnmount() {
@@ -93,6 +112,7 @@ class SearchMainScreen extends React.Component<Props, State> {
 
     onChange = (text:string) => {
         this.setState({text: text});
+        // this.getList();
     };
 
     pull2Refresh = () => {
@@ -104,18 +124,37 @@ class SearchMainScreen extends React.Component<Props, State> {
         this.getList();
     };
 
-    getList = () => {
+    _getList = () => {
         const {text, page, pageSize} = this.state;
         this.animateState({
             doingLoading: true
         });
         console.log('page-pageSize', page, pageSize);
+        let params: SearchParams = {Keyword: text, Page: page, PageSize: pageSize};
+        if (SearchMainScreen.carTypeId != -1) {
+            params.CarTypeId = SearchMainScreen.carTypeId;
+        }
+        if (SearchMainScreen.shiftTypeId != -1) {
+            params.ShiftTypeId = SearchMainScreen.shiftTypeId;
+        }
+        if (SearchMainScreen.date != 'All') {
+            params.ShiftDate = SearchMainScreen.date;
+        }
+        if (SearchMainScreen.priceModelId != -1) {
+            params.PriceModelId = SearchMainScreen.priceModelId;
+        }
+        if (SearchMainScreen.minPrice != -1) {
+            params.PriceMin = SearchMainScreen.minPrice;
+        }
+        if (SearchMainScreen.maxPrice != -1) {
+            params.PriceMax = SearchMainScreen.maxPrice;
+        }
         // @ts-ignore
-        fetch(GET, api_list.search, {Keyword: text, Page: page, PageSize: pageSize})
+        fetch(GET, api_list.search, params)
             .then((response: any) => {
                 console.log(response);
                 this.animateState({
-                    posts: response.result.results,
+                    posts: response.result.hits,
                     randomKey: Math.random(),
                     doingLoading: false,
                 });
@@ -210,17 +249,35 @@ class SearchMainScreen extends React.Component<Props, State> {
                         onPress={() => this.props.navigation.navigate(ROUTES.SearchFilter)}
                         // style={{ height: hp(4), marginLeft: Metrics.baseMargin}}
                     />
+                    <BaseIcon
+                        containerStyle={{
+                            backgroundColor: Colors.brandPrimary,
+                            height: hp(4),
+                            width: hp(4),
+                            borderRadius: hp(2),
+                            marginTop: hp(1),
+                            marginEnd: 0,
+                        }}
+                        icon={{
+                            size: Metrics.icons.large,
+                            type: "material",
+                            name: "play-arrow",
+                            color: Colors.white}}
+                        onPress={() => this.getList()}
+                        // style={{ height: hp(4), marginLeft: Metrics.baseMargin}}
+                    />
                     {/*</InputGroup>*/}
                 </View>
                 <PTRView onRefresh={this.pull2Refresh} style={styles.scroll}>
                     <ScrollView contentContainerStyle={styles.listContainer}>
-                        {posts.map((item: PostListItem) => {
+                        {posts.map((item: any) => {
+                            const source = item.source;
                             const {
                                 title, description,
                                 carTypeName, carMake, carModel,
                                 priceModelName,
                                 suburb, state, postCode,
-                                shiftTypeName, shiftDate} = item;
+                                shiftTypeName, shiftDate} = source;
                             let items = [];
                             if (!!suburb) {
                                 items.push(suburb);
@@ -335,7 +392,7 @@ const styles = StyleSheet.create({
     // },
     searchBoxContainer: {
         marginTop: hp(0.5),
-        width: '91%',
+        width: '82%',
         height: hp(5),
         paddingStart: 0,
         backgroundColor: Colors.white,
@@ -351,7 +408,7 @@ const styles = StyleSheet.create({
     scroll: {
         width: '100%',
         // height: hp(100) - Fonts.size.h1,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.lightgrey,
     },
     listContainer: {
         marginBottom: Metrics.baseMargin,

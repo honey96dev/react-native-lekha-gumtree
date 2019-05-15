@@ -296,7 +296,7 @@ const styles = StyleSheet.create({
     scroll: {
         width: '100%',
         // height: hp(100) - Fonts.size.h1,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.lightgrey,
     },
     listContainer: {
         marginBottom: Metrics.baseMargin,

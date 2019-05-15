@@ -13,7 +13,7 @@ import {
 import {NavigationScreenProps} from "react-navigation";
 import {Button} from 'react-native-elements';
 import Swiper from 'react-native-swiper';
-import {AuthorizeResult, refresh, revoke} from 'react-native-app-auth';
+import {authorize, AuthorizeResult, refresh, revoke} from 'react-native-app-auth';
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import AutoHeightImage from 'react-native-auto-height-image';
 // @ts-ignore
@@ -85,15 +85,15 @@ export default class App extends Component<Props, State> {
         try {
             console.log('authorize');
             this.animateState({doingLoading: true});
-            // const authState = await authorize(G.AppAuthConfig);
-            let authState:AuthorizeResult = {
-                accessToken: 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYmYiOjE1NTc4NTI1NzYsImV4cCI6MTU1Nzg1NjE3NiwiaXNzIjoiaHR0cHM6Ly9pZGVudGl0eS5sZWtoYS5jb20uYXUvIiwiYXVkIjpbImh0dHBzOi8vaWRlbnRpdHkubGVraGEuY29tLmF1L3Jlc291cmNlcyIsInRlc3QtbW9iaWxlLWFwaSJdLCJjbGllbnRfaWQiOiJ0ZXN0LWFwcCIsInN1YiI6IjU4ODY1YjIxLTgyNWItNGIyYy04OWU0LTMxMzUxOTk4ZWNiOCIsImF1dGhfdGltZSI6MTU1Nzg1MjU3NSwiaWRwIjoibG9jYWwiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJyYW5qZWV0ZG90bWVAZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZ2l2ZW5uYW1lIjoiUmFuamVldCIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL3N1cm5hbWUiOiJTaW5naCIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWVpZGVudGlmaWVyIjoiNTg4NjViMjEtODI1Yi00YjJjLTg5ZTQtMzEzNTE5OThlY2I4Iiwic2NvcGUiOlsidGVzdC1tb2JpbGUtYXBpIl0sImFtciI6WyJwd2QiXX0.WwI3zTINq1VJx2eLAvlnoBVzS1lDnuZQLXvu5bg65d1QwFayEhh9GjWdbsHBd5EoHiLEeNAbq3ii0mrOFzLewo4XNWg42tSlVnTK9NswueeCnnaktB-Th9tYZCquD2tvK5F4-HlF9xbbmM3yXAuVN0ljw02BPAnn-cTczFJLNb7vaI-77UP-Xr-nBiIpeBR1Ctm4ngO0RbyJi31o7AZYjZLJkie8xnYosEF3Y4aH8Med6xxTWRAaJmvPkW81lEyYjQcHWAISOdnI7KTBOfATVir4BAhvV2-ZJIUWeK9CmVUt3vthCHcPWeQMTrWxQjiyUhQ6Vj1j_zLtmG65FGmqRw',
-                accessTokenExpirationDate: '',
-                idToken: '',
-                refreshToken: '',
-                tokenType: '',
-                scopes: [''],
-            };
+            const authState = await authorize(G.AppAuthConfig);
+            // let authState:AuthorizeResult = {
+            //     accessToken: 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYmYiOjE1NTc4ODU4ODAsImV4cCI6MTU1Nzg4OTQ4MCwiaXNzIjoiaHR0cHM6Ly9pZGVudGl0eS5sZWtoYS5jb20uYXUvIiwiYXVkIjpbImh0dHBzOi8vaWRlbnRpdHkubGVraGEuY29tLmF1L3Jlc291cmNlcyIsInRlc3QtbW9iaWxlLWFwaSJdLCJjbGllbnRfaWQiOiJ0ZXN0LWFwcCIsInN1YiI6IjU4ODY1YjIxLTgyNWItNGIyYy04OWU0LTMxMzUxOTk4ZWNiOCIsImF1dGhfdGltZSI6MTU1Nzg4NTg3OSwiaWRwIjoibG9jYWwiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJyYW5qZWV0ZG90bWVAZ21haWwuY29tIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZ2l2ZW5uYW1lIjoiUmFuamVldCIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL3N1cm5hbWUiOiJTaW5naCIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWVpZGVudGlmaWVyIjoiNTg4NjViMjEtODI1Yi00YjJjLTg5ZTQtMzEzNTE5OThlY2I4Iiwic2NvcGUiOlsidGVzdC1tb2JpbGUtYXBpIl0sImFtciI6WyJwd2QiXX0.cVsl5iYfQuqIH6_m3F7l19jeBmSEXA2kPcpqRt9tJkRmUvOY_XHXhuea-9wdIoqwwrhIDxdEYWp3QgmC6WuB8zPTUZxK9RkqQBo-hVOdZywm-B7cFXVRbrOzUhYUCqQQVtvFZCAeTA8Db9JamB9QyTiXjGI2W9LzrfeDfhnBAx6GxUdWr-zMvabO2LW459jqpoaZ7TgGcank-Yw5f-Gyr11EjRDSNHw1gHh1cwow0AJCdY3WNf3SkyyLYoorrPTg01Jz9MUcwSF4gLnGkulq4YOfxkam01d41p1LCRBb32nXN-pbCJh6X2JnA8pcpQVvuEj3tvJCiUlIk6WytaB33w',
+            //     accessTokenExpirationDate: '',
+            //     idToken: '',
+            //     refreshToken: '',
+            //     tokenType: '',
+            //     scopes: [''],
+            // };
 
             this.setState(
                 {
