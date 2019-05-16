@@ -315,7 +315,7 @@ const styles = StyleSheet.create({
     container: {
         width: '100%',
         height: '100%',
-        backgroundColor: '#311f36',
+        backgroundColor: Colors.backgroundEggplant,
         flex: 1,
         flexDirection: 'column',
         alignItems: 'center',
@@ -324,7 +324,7 @@ const styles = StyleSheet.create({
     mainDiv: {
         width: '100%',
         height: '100%',
-        backgroundColor: '#311f36',
+        backgroundColor: Colors.backgroundEggplant,
         flex: 1,
         flexDirection: 'column',
         alignItems: 'center',
@@ -398,14 +398,6 @@ const styles = StyleSheet.create({
         fontSize: Fonts.size.button1,
         fontWeight: "400",
     },
-    createAccountButton: {
-        backgroundColor: 'transparent',
-        borderWidth: StyleSheet.hairlineWidth,
-        borderColor: Colors.snow,
-    },
-    createAccountButtonText: {
-        color: 'white'
-    },
     separatorContainer: {
         alignItems: 'center',
         flexDirection: 'row',
@@ -421,6 +413,14 @@ const styles = StyleSheet.create({
         fontSize: Fonts.size.button1,
         color: '#9B9FA4',
         marginHorizontal: 8
+    },
+    createAccountButton: {
+        backgroundColor: 'transparent',
+        borderWidth: StyleSheet.hairlineWidth,
+        borderColor: Colors.snow,
+    },
+    createAccountButtonText: {
+        color: 'white'
     },
     signInButton: {
         backgroundColor: Colors.brandPrimary,

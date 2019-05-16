@@ -334,7 +334,7 @@ class UserProfileScreen extends React.Component<Props, State> {
                         leftIcon={
                             <BaseIcon
                                 containerStyle={{backgroundColor: Colors.skyblue}}
-                                icon={{type: "feather", name: "calendar"}}
+                                icon={{type: "feather", name: "bold"}}
                             />
                         }
                         rightIcon={

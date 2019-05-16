@@ -41,6 +41,7 @@
     "react-native-elements": "^1.1.0",
     "react-native-gesture-handler": "^1.2.1",
     "react-native-loading-spinner-overlay": "^1.0.1",
+    "react-native-numeric-input": "^1.6.5",
     "react-native-paper": "^2.15.2",
     "react-native-picker": "^4.3.7",
     "react-native-pull-to-refresh": "^2.1.3",

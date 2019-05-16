@@ -1,6 +1,7 @@
 const colors = {
   // background2: '#D81B60',
   background: '#1F0808',
+  backgroundEggplant: '#311f36',
   clear: 'rgba(0,0,0,0)',
   facebook: '#3b5998',
   transparent: 'rgba(0,0,0,0)',
@@ -55,6 +56,7 @@ const colors = {
   tabBackground: '#e2e2e2',
   tabActiveTint: '#1b9af7',
   tabInactiveTint: '#8d8d8d',
+  backgroundGray: '#F4F5F4',
 }
 
 export default colors

@@ -305,7 +305,7 @@ const styles = StyleSheet.create({
     container: {
         width: '100%',
         height: '100%',
-        backgroundColor: '#311f36',
+        backgroundColor: Colors.backgroundEggplant,
         flex: 1,
         flexDirection: 'column',
         alignItems: 'center',
@@ -314,7 +314,7 @@ const styles = StyleSheet.create({
     mainDiv: {
         width: '100%',
         height: '100%',
-        backgroundColor: '#311f36',
+        backgroundColor: Colors.backgroundEggplant,
         flex: 1,
         flexDirection: 'column',
         alignItems: 'center',

@@ -16,8 +16,8 @@ const styles = StyleSheet.create<Styles>({
         borderWidth: 1,
         height: 34,
         justifyContent: 'center',
-        marginLeft: 10,
-        marginRight: 18,
+        // marginLeft: 10,
+        // marginRight: 18,
         width: 34,
     },
 });

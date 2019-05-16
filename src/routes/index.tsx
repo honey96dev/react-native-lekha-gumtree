@@ -12,6 +12,7 @@ import LoginScreen from '../screens/LoginScreen';
 import HomeScreen from '../screens/HomeScreen';
 import SearchMainScreen from '../screens/search/SearchMainScreen';
 import SearchFilterScreen from '../screens/search/SearchFilterScreen';
+import PostMainScreen from '../screens/post/PostMainScreen';
 import UserMainScreen from '../screens/user/UserMainScreen';
 import UserProfileScreen from '../screens/user/UserProfileScreen';
 import {setBaseURL} from "../apis";
@@ -34,6 +35,7 @@ export enum ROUTES {
     Home = "Home",
     SearchMain = "SearchMain",
     SearchFilter = "SearchFilter",
+    PostMain = "PostMain",
     UserMain = "UserMain",
     UserProfile = "UserProfile",
 }
@@ -123,6 +125,20 @@ const MainTab = createMaterialTopTabNavigator({
                     size={color.focused ? 26 : 24}
                     type={"material"}
                     name={"search"}
+                    color={color.focused ? Colors.tabActiveTint : Colors.tabInactiveTint}/>);
+            }
+        },
+    },
+    [ROUTES.PostMain]: {
+        screen: PostMainScreen,
+        navigationOptions: {
+            header: null,
+            tabBarLabel:"Search",
+            tabBarIcon: (color:any) => {
+                return (<Icon
+                    size={color.focused ? 26 : 24}
+                    type={"material"}
+                    name={"fiber-new"}
                     color={color.focused ? Colors.tabActiveTint : Colors.tabInactiveTint}/>);
             }
         },

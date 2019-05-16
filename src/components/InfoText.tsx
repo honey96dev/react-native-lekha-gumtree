@@ -1,13 +1,13 @@
 import React from 'react'
 import {StyleSheet, Text, View} from 'react-native'
-import {Fonts, Metrics} from "../themes";
+import {Colors, Fonts, Metrics} from "../themes";
 
 const styles = StyleSheet.create({
     container: {
         paddingTop: Metrics.basePadding,
         paddingBottom: Metrics.basePadding,
         paddingLeft: Metrics.basePadding,
-        backgroundColor: '#F4F5F4',
+        backgroundColor: Colors.backgroundGray,
     },
     infoText: {
         fontSize: Fonts.size.input,

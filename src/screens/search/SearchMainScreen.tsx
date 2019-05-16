@@ -244,8 +244,8 @@ class SearchMainScreen extends React.Component<Props, State> {
                         }}
                         icon={{
                             size: Metrics.icons.large,
-                            type: "material",
-                            name: "menu",
+                            type: "feature",
+                            name: "list",
                             color: Colors.white}}
                         onPress={() => this.props.navigation.navigate(ROUTES.SearchFilter)}
                         // style={{ height: hp(4), marginLeft: Metrics.baseMargin}}

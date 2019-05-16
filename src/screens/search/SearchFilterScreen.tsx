@@ -186,6 +186,9 @@ class SearchFilterScreen extends React.Component<Props, State> {
 
     onPressCarType = () => {
         let data: string[] = [];
+        if (this.state.carTypes.length == 0) {
+            return;
+        }
         for (let item of this.state.carTypes) {
             // @ts-ignore
             data.push(item.name);
@@ -218,6 +221,9 @@ class SearchFilterScreen extends React.Component<Props, State> {
 
     onPressShiftType = () => {
         let data: string[] = [];
+        if (this.state.shiftTypes.length == 0) {
+            return;
+        }
         for (let item of this.state.shiftTypes) {
             // @ts-ignore
             data.push(item.name);
@@ -326,6 +332,9 @@ class SearchFilterScreen extends React.Component<Props, State> {
 
     onPressPriceModel = () => {
         let data: string[] = [];
+        if (this.state.priceModels.length == 0) {
+            return;
+        }
         for (let item of this.state.priceModels) {
             // @ts-ignore
             data.push(item.name);
