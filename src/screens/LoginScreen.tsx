@@ -16,6 +16,7 @@ import Swiper from 'react-native-swiper';
 import {authorize, AuthorizeResult, refresh, revoke} from 'react-native-app-auth';
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import AutoHeightImage from 'react-native-auto-height-image';
+import codePush from 'react-native-code-push';
 // @ts-ignore
 // import Spinner from 'react-native-loading-spinner-overlay';
 import {ROUTES} from "../routes";
@@ -45,7 +46,7 @@ interface State {
     doingLoading: boolean,
 };
 
-export default class App extends Component<Props, State> {
+class LoginScreen extends Component<Props, State> {
     private animatedValue: Animated.Value;
     state = {
         isSplash: true,
@@ -429,3 +430,6 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.transparent
     },
 });
+
+let codePushOptions = { checkFrequency: codePush.CheckFrequency.ON_APP_RESUME };
+export default codePush(codePushOptions)(LoginScreen);

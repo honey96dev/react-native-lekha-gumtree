@@ -12,6 +12,7 @@ import {
 import {NavigationScreenProps} from "react-navigation";
 import AutoHeightImage from 'react-native-auto-height-image';
 import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
+import codePush from 'react-native-code-push';
 // @ts-ignore
 import {ROUTES} from "../routes";
 import Images from '../themes/Images';
@@ -134,5 +135,6 @@ const styles = StyleSheet.create({
     },
 });
 
-export default SplashScreen;
+let codePushOptions = { checkFrequency: codePush.CheckFrequency.ON_APP_RESUME };
+export default codePush(codePushOptions)(SplashScreen);
 

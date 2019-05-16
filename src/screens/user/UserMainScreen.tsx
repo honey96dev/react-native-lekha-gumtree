@@ -4,6 +4,7 @@ import {NavigationScreenProps} from "react-navigation";
 // @ts-ignore
 import {Avatar, Button, Header, Icon, ListItem} from "react-native-elements";
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from 'react-native-responsive-screen';
+import codePush from 'react-native-code-push';
 // @ts-ignore
 // import Spinner from 'react-native-loading-spinner-overlay';
 // @ts-ignore
@@ -335,5 +336,6 @@ const styles = StyleSheet.create({
     },
 });
 
-export default UserMainScreen;
+let codePushOptions = { checkFrequency: codePush.CheckFrequency.ON_APP_RESUME };
+export default codePush(codePushOptions)(UserMainScreen);
 

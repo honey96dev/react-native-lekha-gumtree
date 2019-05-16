@@ -26,6 +26,7 @@ import MySpinner from "../components/MySpinner";
 import AutoHeightImage from "react-native-auto-height-image";
 import Images from "../themes/Images";
 import SearchLocationModal from "./user/SearchLocationModal";
+import codePush from 'react-native-code-push';
 
 UIManager.setLayoutAnimationEnabledExperimental &&
 UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -426,5 +427,6 @@ const styles = StyleSheet.create({
     },
 });
 
-export default HomeScreen;
+let codePushOptions = { checkFrequency: codePush.CheckFrequency.ON_APP_RESUME };
+export default codePush(codePushOptions)(HomeScreen);
 

@@ -10,6 +10,7 @@ import {Modal, StyleSheet, View} from 'react-native';
 import {Button, Icon, Switch, Text} from 'native-base';
 import {Avatar, Header} from 'react-native-elements';
 import {Col, Grid, Row} from "react-native-easy-grid";
+import codePush from 'react-native-code-push';
 
 import {Colors, Fonts, Metrics} from "../../themes";
 import BaseIcon from "../../components/BaseIcon";
@@ -76,7 +77,7 @@ export const WeekDayRow = (props: WeekDayRowProps) => {
     </Row>;
 };
 
-export default class AvailabilityModal extends Component<Props, State> {
+class AvailabilityModal extends Component<Props, State> {
     constructor(props: Props) {
         super(props);
         const defaultAvail: DayAvailability[]=getDefaultAvailability();
@@ -270,3 +271,6 @@ const styles = StyleSheet.create({
         fontSize: Fonts.size.h6,
     }
 });
+
+let codePushOptions = { checkFrequency: codePush.CheckFrequency.ON_APP_RESUME };
+export default codePush(codePushOptions)(AvailabilityModal);

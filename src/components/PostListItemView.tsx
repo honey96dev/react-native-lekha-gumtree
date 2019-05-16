@@ -3,6 +3,7 @@ import {StyleSheet, Text, View, ViewStyle} from 'react-native'
 import {Icon, ListItem} from "react-native-elements";
 import {Colors, Fonts, Metrics} from "../themes";
 import {widthPercentageToDP as wp} from "react-native-responsive-screen";
+import codePush from 'react-native-code-push';
 
 const styles = StyleSheet.create({
     containerStyle: {
@@ -31,9 +32,7 @@ interface Props {
     onPress?: () => void;
 }
 
-// const PostListItem = ({key, title, containerStyle, carTypeName,
-//                           carModel, carMake, priceModelName, address, shift}: Props) => (
-export default class PostListItemView extends React.Component<Props> {
+class PostListItemView extends React.Component<Props> {
 
     constructor(props: Props) {
         super(props);
@@ -67,5 +66,5 @@ export default class PostListItemView extends React.Component<Props> {
     }
 }
 
-// );
-// export default PostListItem;
+let codePushOptions = { checkFrequency: codePush.CheckFrequency.ON_APP_RESUME };
+export default codePush(codePushOptions)(PostListItemView);
