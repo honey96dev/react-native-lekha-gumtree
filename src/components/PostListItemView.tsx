@@ -1,12 +1,9 @@
 import * as React from 'react'
 import {StyleSheet, Text, View, ViewStyle} from 'react-native'
-import {NavigationScreenProps} from "react-navigation";
 import {Icon, ListItem} from "react-native-elements";
 import {Colors, Fonts, Metrics} from "../themes";
 import {widthPercentageToDP as wp} from "react-native-responsive-screen";
 import codePush from 'react-native-code-push';
-import G from "../tools/G";
-import {ROUTES} from "../routes";
 
 const styles = StyleSheet.create({
     containerStyle: {
@@ -23,7 +20,7 @@ const styles = StyleSheet.create({
 });
 
 interface Props {
-    key?: string|number,
+    unique: string,
     title?: string|number,
     containerStyle?: ViewStyle,
     carTypeName?: string|number,
@@ -49,13 +46,14 @@ class PostListItemView extends React.Component<Props> {
     // };
 
     render() {
-        const {key, title, containerStyle, carTypeName,
+        const {unique, title, containerStyle, carTypeName,
                           carModel, carMake, priceModelName, address, shift} = this.props;
+        console.log('key', unique);
         return (
             <ListItem
-                key={key}
+                key={unique}
                 containerStyle={[styles.containerStyle, containerStyle]}
-                onPress={() => !!this.props.onPress && this.props.onPress(key)}
+                onPress={() => !!this.props.onPress && this.props.onPress(unique)}
                 title={
                     <View>
                         <Text style={{color: Colors.blacktxt, fontSize: Fonts.size.h5}}>{title}</Text>

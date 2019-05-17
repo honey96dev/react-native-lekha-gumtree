@@ -12,8 +12,8 @@ import G, {AddressType, DayAvailability} from "../../tools/G";
 import {ROUTES} from "../../routes";
 import InfoText from "../../components/InfoText";
 import BaseIcon from "../../components/BaseIcon";
-import SearchLocationModal from "./SearchLocationModal";
-import AvailabilityModal from "./AvailabilityModal";
+import SearchLocationModal from "../../components/SearchLocationModal";
+import AvailabilityModal from "../../components/AvailabilityModal";
 import {api_list, fetch, POST, PUT} from "../../apis";
 import MySpinner from "../../components/MySpinner";
 

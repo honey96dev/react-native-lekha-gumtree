@@ -16,7 +16,7 @@ import InfoText from "../../components/InfoText";
 import BaseIcon from "../../components/BaseIcon";
 import {api_list, fetch, GET} from "../../apis";
 import MySpinner from "../../components/MySpinner";
-import SearchLocationModal from "../user/SearchLocationModal";
+import SearchLocationModal from "../../components/SearchLocationModal";
 import {AddressType} from "../../tools/G";
 
 UIManager.setLayoutAnimationEnabledExperimental &&

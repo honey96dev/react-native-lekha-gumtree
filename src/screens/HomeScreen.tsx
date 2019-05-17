@@ -15,7 +15,7 @@ import {api_list, fetch, GET} from "../apis";
 import MySpinner from "../components/MySpinner";
 import AutoHeightImage from "react-native-auto-height-image";
 import Images from "../themes/Images";
-import SearchLocationModal from "./user/SearchLocationModal";
+import SearchLocationModal from "../components/SearchLocationModal";
 
 UIManager.setLayoutAnimationEnabledExperimental &&
 UIManager.setLayoutAnimationEnabledExperimental(true);

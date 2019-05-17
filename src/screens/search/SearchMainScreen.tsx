@@ -282,7 +282,7 @@ export default class SearchMainScreen extends React.Component<Props, State> {
                         {!!posts && posts.length > 0 && posts.map((item: any) => {
                             const source = item.source;
                             const {
-                                title, description,
+                                id, title, description,
                                 carTypeName, carMake, carModel,
                                 priceModelName,
                                 suburb, state, postCode,
@@ -312,7 +312,7 @@ export default class SearchMainScreen extends React.Component<Props, State> {
                             const shift = items.join(' | ');
                             return (
                                 <PostListItemView
-                                    key={item.id}
+                                    unique={id}
                                     title={title}
                                     carTypeName={carTypeName}
                                     carModel={carModel}

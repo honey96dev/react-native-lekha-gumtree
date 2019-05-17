@@ -4,14 +4,14 @@
 //@flow
 import React, {Component} from 'react';
 import _ from 'lodash';
-import {AddressType} from '../../tools/G';
+import {AddressType} from '../tools/G';
 import {Icon, Input, ListItem, Text} from 'react-native-elements';
 import {Modal, ScrollView, StyleSheet, View} from 'react-native';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
-import {Colors, Fonts, Metrics} from "../../themes";
-import BaseIcon from "../../components/BaseIcon";
-import {api_list, fetch, GET} from "../../apis";
+import {Colors, Fonts, Metrics} from "../themes";
+import BaseIcon from "./BaseIcon";
+import {api_list, fetch, GET} from "../apis";
 
 interface Props {
     trigger: 'onFocus' | 'onPress',

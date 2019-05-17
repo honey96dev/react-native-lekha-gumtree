@@ -191,7 +191,7 @@ export default class UserMainScreen extends React.Component<Props, State> {
                     <ScrollView contentContainerStyle={styles.listContainer}>
                         {!!posts && posts.length > 0 && posts.map((item: PostListItem) => {
                             const {
-                                title, description,
+                                id, title, description,
                                 carTypeName, carMake, carModel,
                                 priceModelName,
                                 suburb, state, postCode,
@@ -219,9 +219,10 @@ export default class UserMainScreen extends React.Component<Props, State> {
                                 items.push(shiftTypeName);
                             }
                             const shift = items.join(' | ');
+                            // console.log('id', id);
                             return (
                                 <PostListItemView
-                                    key={item.id}
+                                    unique={id}
                                     title={title}
                                     carTypeName={carTypeName}
                                     carModel={carModel}

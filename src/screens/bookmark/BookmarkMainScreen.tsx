@@ -170,9 +170,9 @@ export default class BookmarkMainScreen extends React.Component<Props, State> {
                 <PTRView onRefresh={this.pull2Refresh} style={styles.scroll}>
                     <ScrollView contentContainerStyle={styles.listContainer}>
                         {!!posts && posts.length > 0 && posts.map((item: any) => {
-                            const source = item.source;
+                            const source = item;
                             const {
-                                title, description,
+                                id, title, description,
                                 carTypeName, carMake, carModel,
                                 priceModelName,
                                 suburb, state, postCode,
@@ -202,7 +202,7 @@ export default class BookmarkMainScreen extends React.Component<Props, State> {
                             const shift = items.join(' | ');
                             return (
                                 <PostListItemView
-                                    key={item.id}
+                                    unique={id}
                                     title={title}
                                     carTypeName={carTypeName}
                                     carModel={carModel}
