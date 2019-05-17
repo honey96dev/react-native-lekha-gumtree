@@ -1,18 +1,8 @@
 import React from 'react';
-import {
-    Alert,
-    Animated,
-    LayoutAnimation,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableWithoutFeedback,
-    UIManager,
-    View
-} from 'react-native';
+import {LayoutAnimation, StyleSheet, Text, TouchableWithoutFeedback, UIManager, View} from 'react-native';
 import {NavigationScreenProps} from "react-navigation";
 // @ts-ignore
-import {Avatar, Button, Header, Icon, Input, ListItem} from "react-native-elements";
+import {Button, Icon} from "react-native-elements";
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from 'react-native-responsive-screen';
 // @ts-ignore
 // import Spinner from 'react-native-loading-spinner-overlay';
@@ -21,12 +11,11 @@ import PTRView from 'react-native-pull-to-refresh';
 import {Colors, Fonts, Metrics} from "../themes";
 import {ROUTES} from "../routes";
 import G, {AddressType, PostListItem} from "../tools/G";
-import {api_list, fetch, GET, PUT} from "../apis";
+import {api_list, fetch, GET} from "../apis";
 import MySpinner from "../components/MySpinner";
 import AutoHeightImage from "react-native-auto-height-image";
 import Images from "../themes/Images";
 import SearchLocationModal from "./user/SearchLocationModal";
-import codePush from 'react-native-code-push';
 
 UIManager.setLayoutAnimationEnabledExperimental &&
 UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -47,7 +36,7 @@ interface State {
     // isPublicKey: number;
 }
 
-class HomeScreen extends React.Component<Props, State> {
+export default class HomeScreen extends React.Component<Props, State> {
     // private animatedValue: Animated.Value;
     state = {
         doingLoading: false,
@@ -427,6 +416,6 @@ const styles = StyleSheet.create({
     },
 });
 
-let codePushOptions = { checkFrequency: codePush.CheckFrequency.ON_APP_RESUME };
-export default codePush(codePushOptions)(HomeScreen);
+// let codePushOptions = { checkFrequency: codePush.CheckFrequency.ON_APP_RESUME };
+// export default codePush(codePushOptions)(HomeScreen);
 

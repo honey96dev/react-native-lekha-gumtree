@@ -13,8 +13,10 @@ import HomeScreen from '../screens/HomeScreen';
 import SearchMainScreen from '../screens/search/SearchMainScreen';
 import SearchFilterScreen from '../screens/search/SearchFilterScreen';
 import PostMainScreen from '../screens/post/PostMainScreen';
+import BookmarkMainScreen from '../screens/bookmark/BookmarkMainScreen';
 import UserMainScreen from '../screens/user/UserMainScreen';
 import UserProfileScreen from '../screens/user/UserProfileScreen';
+import ListingDetailView from '../components/ListingDetailView';
 import {setBaseURL} from "../apis";
 import {Colors} from "../themes";
 
@@ -36,8 +38,10 @@ export enum ROUTES {
     SearchMain = "SearchMain",
     SearchFilter = "SearchFilter",
     PostMain = "PostMain",
+    BookmarkMain = "BookmarkMain",
     UserMain = "UserMain",
     UserProfile = "UserProfile",
+    ListingDetail = "ListingDetail",
 }
 
 // The stack for the UserProfile
@@ -143,6 +147,20 @@ const MainTab = createMaterialTopTabNavigator({
             }
         },
     },
+    [ROUTES.BookmarkMain]: {
+        screen: BookmarkMainScreen,
+        navigationOptions: {
+            header: null,
+            tabBarLabel:"Search",
+            tabBarIcon: (color:any) => {
+                return (<Icon
+                    size={color.focused ? 26 : 24}
+                    type={"material"}
+                    name={"star"}
+                    color={color.focused ? Colors.tabActiveTint : Colors.tabInactiveTint}/>);
+            }
+        },
+    },
     [ROUTES.UserMain]: {
         screen: UserMainScreen,
         navigationOptions: {
@@ -200,6 +218,11 @@ export default createAppContainer(createStackNavigator(
             },},
         [ROUTES.UserStack]: {
             screen: UserStack,
+            navigationOptions: {
+                header: null,
+            },},
+        [ROUTES.ListingDetail]: {
+            screen: ListingDetailView,
             navigationOptions: {
                 header: null,
             },},

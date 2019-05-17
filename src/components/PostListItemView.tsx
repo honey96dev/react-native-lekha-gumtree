@@ -1,9 +1,12 @@
 import * as React from 'react'
 import {StyleSheet, Text, View, ViewStyle} from 'react-native'
+import {NavigationScreenProps} from "react-navigation";
 import {Icon, ListItem} from "react-native-elements";
 import {Colors, Fonts, Metrics} from "../themes";
 import {widthPercentageToDP as wp} from "react-native-responsive-screen";
 import codePush from 'react-native-code-push';
+import G from "../tools/G";
+import {ROUTES} from "../routes";
 
 const styles = StyleSheet.create({
     containerStyle: {
@@ -29,7 +32,7 @@ interface Props {
     priceModelName?: string|number,
     address?: string|number,
     shift?: string|number,
-    onPress?: () => void;
+    onPress?: (id?: string|number) => void;
 }
 
 class PostListItemView extends React.Component<Props> {
@@ -38,6 +41,13 @@ class PostListItemView extends React.Component<Props> {
         super(props);
     }
 
+    // onPress = (id?: string|number) => {
+    //     // this.p
+    //     // @ts-ignore
+    //     G.listingId = id;
+    //     this.props.navigation.navigate(ROUTES.ListingDetail);
+    // };
+
     render() {
         const {key, title, containerStyle, carTypeName,
                           carModel, carMake, priceModelName, address, shift} = this.props;
@@ -45,6 +55,7 @@ class PostListItemView extends React.Component<Props> {
             <ListItem
                 key={key}
                 containerStyle={[styles.containerStyle, containerStyle]}
+                onPress={() => !!this.props.onPress && this.props.onPress(key)}
                 title={
                     <View>
                         <Text style={{color: Colors.blacktxt, fontSize: Fonts.size.h5}}>{title}</Text>

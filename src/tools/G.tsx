@@ -101,6 +101,7 @@ export default class G {
     static ListPageSize = 50;
     static ListItemCountLimit = 100;
     static UserProfile: UserProfile = {};
+    static listingId: string = '';
     static AppAuthConfig = {
         issuer: 'https://identity.lekha.com.au',
         clientId: 'lekha-mobile-app',

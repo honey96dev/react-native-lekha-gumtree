@@ -6,7 +6,6 @@ import {Button, Header, Icon, Input, ListItem, Text} from "react-native-elements
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from 'react-native-responsive-screen';
 // @ts-ignore
 import Picker from 'react-native-picker';
-import codePush from 'react-native-code-push';
 // @ts-ignore
 import NumericInput from 'react-native-numeric-input';
 import sprintfJs from 'sprintf-js';
@@ -41,12 +40,12 @@ interface PriceModel {
     active?: boolean,
 }
 
-interface VendorType {
-    id?: string|number,
-    name?: string|number,
-    description?: string,
-    active?: boolean,
-}
+// interface VendorType {
+//     id?: string|number,
+//     name?: string|number,
+//     description?: string,
+//     active?: boolean,
+// }
 
 interface ShiftType {
     id?: string|number,
@@ -62,7 +61,7 @@ interface State {
     randomKey: number;
     carTypes: CarType[],
     priceModels: PriceModel[],
-    vendorTypes: VendorType[],
+    vendorTypes: string[],
     shiftTypes: ShiftType[],
     carType: string|number,
     carTypeId: number,
@@ -83,7 +82,7 @@ interface State {
     // isPublicKey: number;
 }
 
-class PostMainScreen extends React.Component<Props, State> {
+export default class PostMainScreen extends React.Component<Props, State> {
     // private animatedValue: Animated.Value;
     state = {
         doingLoading: false,
@@ -143,9 +142,11 @@ class PostMainScreen extends React.Component<Props, State> {
                 const data = response.result;
                 let carTypes: CarType[] = data.carTypes;
                 let priceModels: CarType[] = data.priceModels;
+                let vendorTypes: string[] = data.vendors;
                 let shiftTypes: CarType[] = data.shiftTypes;
                 carTypes.unshift({id: -1, name: 'All', description: '', active: false});
                 priceModels.unshift({id: -1, name: 'All', description: '', active: false});
+                vendorTypes.unshift('Select Vendor');
                 shiftTypes.unshift({id: -1, name: 'All', description: '', active: false});
 
                 // let priceModelIdx = 0;
@@ -290,6 +291,41 @@ class PostMainScreen extends React.Component<Props, State> {
         // console.log('onChangePrice', text);
         // }
     };
+
+    onPressVendor = () => {
+        let data: string[] = [];
+        if (this.state.vendorTypes.length == 0) {
+            return;
+        }
+        for (let item of this.state.vendorTypes) {
+            // @ts-ignore
+            data.push(item);
+        }
+        Picker.init({
+            pickerData: data,
+            selectedValue: [this.state.vendor],
+            pickerConfirmBtnText: "OK",
+            pickerCancelBtnText: "Cancel",
+            pickerTitleText: "Shift Type",
+            pickerConfirmBtnColor: [234, 84, 36, 1],
+            pickerCancelBtnColor: [234, 84, 36, 1],
+            pickerTitleColor: [255, 255, 255, 1],
+            pickerToolBarBg: [49, 31, 54, 1],
+            pickerBg: [234, 84, 36, 1],
+            pickerFontColor: [255, 255, 255, 1],
+            onPickerConfirm: (data: string[]) => {
+                console.log(data);
+                this.setState({vendor: data[0]});
+            },
+            onPickerCancel: data => {
+                console.log(data);
+            },
+            onPickerSelect: (data: string[]) => {
+                console.log(data);
+            }
+        });
+        Picker.show();
+    }
 
     onLocationSelected = (address: AddressType) => {
         const {postCode, suburb, state, longitude, latitude} = address;
@@ -586,7 +622,7 @@ class PostMainScreen extends React.Component<Props, State> {
                         title="Vendor"
                         containerStyle={styles.listItemContainer}
                         // titleStyle={{fontSize: Fonts.size.h4}}
-                        onPress={this.onPressPriceModel}
+                        onPress={this.onPressVendor}
                         leftIcon={
                             <BaseIcon
                                 containerStyle={{backgroundColor: Colors.brandPrimary}}
@@ -690,12 +726,12 @@ class PostMainScreen extends React.Component<Props, State> {
                         titleStyle={[styles.buttonTextDefault, styles.postButtonText]}
                         title={"Post"}
                         />
-                    <Button
-                        type="outline"
-                        buttonStyle={[styles.buttonDefault, styles.cancelButton]}
-                        titleStyle={[styles.buttonTextDefault, styles.cancelButtonText]}
-                        title={"Cancel"}
-                    />
+                    {/*<Button*/}
+                        {/*type="outline"*/}
+                        {/*buttonStyle={[styles.buttonDefault, styles.cancelButton]}*/}
+                        {/*titleStyle={[styles.buttonTextDefault, styles.cancelButtonText]}*/}
+                        {/*title={"Cancel"}*/}
+                    {/*/>*/}
                 </View>
                 <MySpinner visible={this.state.doingLoading} color={Colors.brandPrimary}/>
             </View>
@@ -780,6 +816,6 @@ const styles = StyleSheet.create({
     },
 });
 
-let codePushOptions = { checkFrequency: codePush.CheckFrequency.ON_APP_RESUME };
-export default codePush(codePushOptions)(PostMainScreen);
+// let codePushOptions = { checkFrequency: codePush.CheckFrequency.ON_APP_RESUME };
+// export default codePush(codePushOptions)(PostMainScreen);
 

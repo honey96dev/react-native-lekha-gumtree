@@ -2,9 +2,8 @@ import React from 'react';
 import {LayoutAnimation, ScrollView, StyleSheet, Text, UIManager, View} from 'react-native';
 import {NavigationScreenProps} from "react-navigation";
 // @ts-ignore
-import {Avatar, Button, Header, Icon, ListItem} from "react-native-elements";
+import {Avatar, Button, Header} from "react-native-elements";
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from 'react-native-responsive-screen';
-import codePush from 'react-native-code-push';
 // @ts-ignore
 // import Spinner from 'react-native-loading-spinner-overlay';
 // @ts-ignore
@@ -35,7 +34,7 @@ interface State {
     // isPublicKey: number;
 }
 
-class UserMainScreen extends React.Component<Props, State> {
+export default class UserMainScreen extends React.Component<Props, State> {
     // private animatedValue: Animated.Value;
     state = {
         doingLoading: false,
@@ -68,6 +67,13 @@ class UserMainScreen extends React.Component<Props, State> {
             });
         }, delay);
     }
+
+    onItemPress = (id?: string|number) => {
+        // this.p
+        // @ts-ignore
+        G.listingId = id;
+        this.props.navigation.navigate(ROUTES.ListingDetail);
+    };
 
     getTextFromAddress = () => {
         const profile = G.UserProfile;
@@ -183,7 +189,7 @@ class UserMainScreen extends React.Component<Props, State> {
                 />
                 <PTRView onRefresh={this.pull2Refresh} style={styles.scroll}>
                     <ScrollView contentContainerStyle={styles.listContainer}>
-                        {posts.map((item: PostListItem) => {
+                        {!!posts && posts.length > 0 && posts.map((item: PostListItem) => {
                             const {
                                 title, description,
                                 carTypeName, carMake, carModel,
@@ -223,6 +229,7 @@ class UserMainScreen extends React.Component<Props, State> {
                                     priceModelName={priceModelName}
                                     address={address}
                                     shift={shift}
+                                    onPress={this.onItemPress}
                                 />
                             );
                             // return (
@@ -336,6 +343,6 @@ const styles = StyleSheet.create({
     },
 });
 
-let codePushOptions = { checkFrequency: codePush.CheckFrequency.ON_APP_RESUME };
-export default codePush(codePushOptions)(UserMainScreen);
+// let codePushOptions = { checkFrequency: codePush.CheckFrequency.ON_APP_RESUME };
+// export default codePush(codePushOptions)(UserMainScreen);
 

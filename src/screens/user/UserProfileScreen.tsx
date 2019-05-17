@@ -3,9 +3,8 @@ import {Alert, LayoutAnimation, ScrollView, StyleSheet, Text, UIManager, View} f
 import {NavigationScreenProps} from "react-navigation";
 // @ts-ignore
 import {Avatar, Button, Header, ListItem} from "react-native-elements";
-import {heightPercentageToDP as hp, widthPercentageToDP as wp} from 'react-native-responsive-screen';
+import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import {revoke} from 'react-native-app-auth';
-import codePush from 'react-native-code-push';
 // @ts-ignore
 // import Spinner from 'react-native-loading-spinner-overlay';
 import {Colors, Fonts, Metrics} from "../../themes";
@@ -33,7 +32,7 @@ interface State {
     // isPublicKey: number;
 }
 
-class UserProfileScreen extends React.Component<Props, State> {
+export default class UserProfileScreen extends React.Component<Props, State> {
     // private animatedValue: Animated.Value;
     state = {
         doingLoading: false,
@@ -500,6 +499,6 @@ const styles = StyleSheet.create({
     },
 });
 
-let codePushOptions = { checkFrequency: codePush.CheckFrequency.ON_APP_RESUME };
-export default codePush(codePushOptions)(UserProfileScreen);
+// let codePushOptions = { checkFrequency: codePush.CheckFrequency.ON_APP_RESUME };
+// export default codePush(codePushOptions)(UserProfileScreen);
 

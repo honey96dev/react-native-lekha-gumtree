@@ -1,18 +1,8 @@
 import React from 'react';
-import {
-    Animated,
-    Easing,
-    LayoutAnimation,
-    StyleSheet,
-    Text,
-    TouchableWithoutFeedback,
-    UIManager,
-    View
-} from 'react-native';
+import {Animated, Easing, StyleSheet, Text, TouchableWithoutFeedback, UIManager, View} from 'react-native';
 import {NavigationScreenProps} from "react-navigation";
 import AutoHeightImage from 'react-native-auto-height-image';
 import {widthPercentageToDP as wp} from 'react-native-responsive-screen';
-import codePush from 'react-native-code-push';
 // @ts-ignore
 import {ROUTES} from "../routes";
 import Images from '../themes/Images';
@@ -30,7 +20,7 @@ type Props = MyProps & NavigationScreenProps;
 //     isLoading: boolean;
 // }
 
-class SplashScreen extends React.Component<Props> {
+export default class SplashScreen extends React.Component<Props> {
     private animatedValue: Animated.Value;
     state = {
         isLoading: true,
@@ -135,6 +125,6 @@ const styles = StyleSheet.create({
     },
 });
 
-let codePushOptions = { checkFrequency: codePush.CheckFrequency.ON_APP_RESUME };
-export default codePush(codePushOptions)(SplashScreen);
+// let codePushOptions = { checkFrequency: codePush.CheckFrequency.ON_APP_RESUME };
+// export default codePush(codePushOptions)(SplashScreen);
 

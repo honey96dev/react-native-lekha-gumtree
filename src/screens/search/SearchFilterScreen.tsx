@@ -2,12 +2,11 @@ import React from 'react';
 import {LayoutAnimation, ScrollView, StyleSheet, Text, UIManager, View} from 'react-native';
 import {NavigationScreenProps} from "react-navigation";
 // @ts-ignore
-import {ButtonGroup, Header, Icon, ListItem} from "react-native-elements";
+import {Header, Icon, ListItem} from "react-native-elements";
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from 'react-native-responsive-screen';
 // @ts-ignore
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import Picker from 'react-native-picker';
-import codePush from 'react-native-code-push';
 import sprintfJs from 'sprintf-js';
 // @ts-ignore
 // import Spinner from 'react-native-loading-spinner-overlay';
@@ -68,7 +67,7 @@ interface State {
     // isPublicKey: number;
 }
 
-class SearchFilterScreen extends React.Component<Props, State> {
+export default class SearchFilterScreen extends React.Component<Props, State> {
     // private animatedValue: Animated.Value;
     state = {
         doingLoading: false,
@@ -614,6 +613,6 @@ const styles = StyleSheet.create({
     },
 });
 
-let codePushOptions = { checkFrequency: codePush.CheckFrequency.ON_APP_RESUME };
-export default codePush(codePushOptions)(SearchFilterScreen);
+// let codePushOptions = { checkFrequency: codePush.CheckFrequency.ON_APP_RESUME };
+// export default codePush(codePushOptions)(SearchFilterScreen);
 

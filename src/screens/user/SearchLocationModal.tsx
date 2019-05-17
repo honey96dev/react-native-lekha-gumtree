@@ -8,7 +8,6 @@ import {AddressType} from '../../tools/G';
 import {Icon, Input, ListItem, Text} from 'react-native-elements';
 import {Modal, ScrollView, StyleSheet, View} from 'react-native';
 import {heightPercentageToDP as hp} from 'react-native-responsive-screen';
-import codePush from 'react-native-code-push';
 
 import {Colors, Fonts, Metrics} from "../../themes";
 import BaseIcon from "../../components/BaseIcon";
@@ -34,7 +33,7 @@ export interface TriggerProps {
     onFocus?: () => void;
 };
 
-class SearchLocationModal extends Component<Props, State> {
+export default class SearchLocationModal extends Component<Props, State> {
     static SELECT_LOCATION_HELPER_STRING: string = 'Select Location';
     private searchLocations: (() => void);
     constructor (props: Props) {
@@ -189,7 +188,7 @@ class SearchLocationModal extends Component<Props, State> {
                             <ScrollView style={styles.listContainer}>
                                 {/*<View style={styles.list}>*/}
                                     {/*<List>*/}
-                                        {searchedAddresses.map((result: any) => {
+                                        {!!searchedAddresses && searchedAddresses.length > 0 && searchedAddresses.map((result: any) => {
                                             const item = result;
                                             const text = this.getTextFromAddress(item);
                                             return (<ListItem
@@ -269,5 +268,5 @@ const styles = StyleSheet.create({
     // },
 });
 
-let codePushOptions = { checkFrequency: codePush.CheckFrequency.ON_APP_RESUME };
-export default codePush(codePushOptions)(SearchLocationModal);
+// let codePushOptions = { checkFrequency: codePush.CheckFrequency.ON_APP_RESUME };
+// export default codePush(codePushOptions)(SearchLocationModal);

@@ -2,7 +2,7 @@ import React from 'react';
 import {LayoutAnimation, ScrollView, StyleSheet, UIManager, View} from 'react-native';
 import {NavigationScreenProps} from "react-navigation";
 // @ts-ignore
-import {Button, Icon, Input} from "react-native-elements";
+import {Button, Header} from "react-native-elements";
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import _ from 'lodash';
 // @ts-ignore
@@ -10,12 +10,11 @@ import _ from 'lodash';
 // @ts-ignore
 import PTRView from 'react-native-pull-to-refresh';
 import {Colors, Fonts, Metrics} from "../../themes";
-import {ROUTES} from "../../routes";
-import BaseIcon from "../../components/BaseIcon";
 import G, {PostListItem} from "../../tools/G";
 import {api_list, fetch, GET} from "../../apis";
 import MySpinner from "../../components/MySpinner";
 import PostListItemView from "../../components/PostListItemView";
+import {ROUTES} from "../../routes";
 
 UIManager.setLayoutAnimationEnabledExperimental &&
 UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -29,40 +28,17 @@ type Props = MyProps & NavigationScreenProps;
 interface State {
     doingLoading: boolean,
     randomKey: number,
-    text: string,
     page: number,
     pageSize: number,
     posts: PostListItem[],
     // isPublicKey: number;
 }
 
-interface SearchParams {
-    Keyword?: any,
-    Page?: number,
-    PageSize?: number,
-    CarTypeId?: number,
-    ShiftTypeId?: number,
-    ShiftDate?: string,
-    PriceModelId?: number,
-    PriceMin?: number,
-    PriceMax?: number,
-}
-
-export default class SearchMainScreen extends React.Component<Props, State> {
-    static carType: string = 'All';
-    static carTypeId: number = -1;
-    static shiftType: string = 'All';
-    static shiftTypeId: number = -1;
-    static date: string = 'All';
-    static priceModel: string = 'All';
-    static priceModelId: number = -1;
-    static minPrice: number = 0;
-    static maxPrice: number = 1000;
+export default class BookmarkMainScreen extends React.Component<Props, State> {
     // private animatedValue: Animated.Value;
     state = {
         doingLoading: false,
         randomKey: 0,
-        text: '',
         page: 1,
         pageSize: G.ListPageSize,
         posts: [],
@@ -117,11 +93,6 @@ export default class SearchMainScreen extends React.Component<Props, State> {
         return items.join(', ');
     };
 
-    onChange = (text:string) => {
-        this.setState({text: text});
-        // this.getList();
-    };
-
     pull2Refresh = () => {
         let {page, pageSize} = this.state;
         if (page > 1) {
@@ -132,36 +103,16 @@ export default class SearchMainScreen extends React.Component<Props, State> {
     };
 
     _getList = () => {
-        const {text, page, pageSize} = this.state;
+        const {page, pageSize} = this.state;
         this.animateState({
             doingLoading: true
         });
-        console.log('page-pageSize', page, pageSize);
-        let params: SearchParams = {Keyword: text, Page: page, PageSize: pageSize};
-        if (SearchMainScreen.carTypeId != -1) {
-            params.CarTypeId = SearchMainScreen.carTypeId;
-        }
-        if (SearchMainScreen.shiftTypeId != -1) {
-            params.ShiftTypeId = SearchMainScreen.shiftTypeId;
-        }
-        if (SearchMainScreen.date != 'All') {
-            params.ShiftDate = SearchMainScreen.date;
-        }
-        if (SearchMainScreen.priceModelId != -1) {
-            params.PriceModelId = SearchMainScreen.priceModelId;
-        }
-        if (SearchMainScreen.minPrice != -1) {
-            params.PriceMin = SearchMainScreen.minPrice;
-        }
-        if (SearchMainScreen.maxPrice != -1) {
-            params.PriceMax = SearchMainScreen.maxPrice;
-        }
         // @ts-ignore
-        fetch(GET, api_list.search, params)
+        fetch(GET, api_list.profileBookmarks, {page: page, pageSize: pageSize})
             .then((response: any) => {
                 console.log(response);
                 this.animateState({
-                    posts: response.result.hits,
+                    posts: response.result.results,
                     randomKey: Math.random(),
                     doingLoading: false,
                 });
@@ -205,78 +156,17 @@ export default class SearchMainScreen extends React.Component<Props, State> {
         console.log('posts', posts);
         return (
             <View style={styles.container} key={this.state.randomKey}>
-                <View style={styles.searchRow}>
-                    <Input
-                        // ref={(input: Input) => input && input._root.focus()}
-                        autoCorrect={false}
-                        onChangeText={this.onChange}
-                        value={this.state.text}
-                        containerStyle={styles.searchBoxContainer}
-                        inputContainerStyle={styles.searchBoxInner}
-                        // inputStyle={{color: Colors.white}}
-                        placeholder="Search..."
-                        leftIcon={
-                            <Icon
-                                size={Metrics.icons.large}
-                                type={'material'}
-                                name={'search'}
-                                color={Colors.brandPrimary}
-                            />
+                <Header
+                    containerStyle={styles.header}
+                    backgroundColor={Colors.brandPrimary}
+                    centerComponent={{
+                        text: 'Bookmarks',
+                        style: {
+                            color: '#fff',
+                            fontSize: Fonts.size.h4,
                         }
-                        rightIcon={!!this.state.text
-                            ? <BaseIcon
-                                containerStyle={{
-                                    backgroundColor: Colors.brandPrimary,
-                                    height: hp(2.8),
-                                    width: hp(2.8),
-                                    borderRadius: hp(1.4),
-                                    // marginTop: hp(1),
-                                    marginStart: 0,
-                                    marginEnd: 0,
-                                }}
-                                icon={{size: Metrics.icons.small,type: "material", name: "close", color: Colors.white}}
-                                onPress={() => this.setState({text: ''})}
-                                // style={{ height: hp(4), marginLeft: Metrics.baseMargin}}
-                            /> : undefined}
-                    />
-                    <BaseIcon
-                        containerStyle={{
-                            backgroundColor: Colors.brandPrimary,
-                            height: hp(4),
-                            width: hp(4),
-                            borderRadius: hp(2),
-                            marginTop: hp(1),
-                            marginStart: wp(2),
-                            marginEnd: 0,
-                        }}
-                        icon={{
-                            size: Metrics.icons.large,
-                            type: "feature",
-                            name: "list",
-                            color: Colors.white}}
-                        onPress={() => this.props.navigation.navigate(ROUTES.SearchFilter)}
-                        // style={{ height: hp(4), marginLeft: Metrics.baseMargin}}
-                    />
-                    <BaseIcon
-                        containerStyle={{
-                            backgroundColor: Colors.brandPrimary,
-                            height: hp(4),
-                            width: hp(4),
-                            borderRadius: hp(2),
-                            marginTop: hp(1),
-                            marginStart: wp(1),
-                            marginEnd: 0,
-                        }}
-                        icon={{
-                            size: Metrics.icons.large,
-                            type: "material",
-                            name: "play-arrow",
-                            color: Colors.white}}
-                        onPress={() => this.getList()}
-                        // style={{ height: hp(4), marginLeft: Metrics.baseMargin}}
-                    />
-                    {/*</InputGroup>*/}
-                </View>
+                    }}
+                />
                 <PTRView onRefresh={this.pull2Refresh} style={styles.scroll}>
                     <ScrollView contentContainerStyle={styles.listContainer}>
                         {!!posts && posts.length > 0 && posts.map((item: any) => {
@@ -375,13 +265,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center'
     },
-    searchRow: {
-        width: '100%',
+    header: {
         height: Fonts.size.h1,
-        flexDirection: "row",
-        paddingStart: Metrics.basePadding,
-        paddingEnd: Metrics.basePadding,
-        backgroundColor: Colors.brandPrimary,
+        paddingTop: 0,
     },
     // header: {
     //     height: hp(10),
@@ -456,7 +342,3 @@ const styles = StyleSheet.create({
         fontSize: 20,
     },
 });
-
-// let codePushOptions = { checkFrequency: codePush.CheckFrequency.ON_APP_RESUME };
-// export default codePush(codePushOptions)(SearchMainScreen);
-

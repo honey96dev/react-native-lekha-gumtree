@@ -10,7 +10,6 @@ import {Modal, StyleSheet, View} from 'react-native';
 import {Button, Icon, Switch, Text} from 'native-base';
 import {Avatar, Header} from 'react-native-elements';
 import {Col, Grid, Row} from "react-native-easy-grid";
-import codePush from 'react-native-code-push';
 
 import {Colors, Fonts, Metrics} from "../../themes";
 import BaseIcon from "../../components/BaseIcon";
@@ -77,7 +76,7 @@ export const WeekDayRow = (props: WeekDayRowProps) => {
     </Row>;
 };
 
-class AvailabilityModal extends Component<Props, State> {
+export default class AvailabilityModal extends Component<Props, State> {
     constructor(props: Props) {
         super(props);
         const defaultAvail: DayAvailability[]=getDefaultAvailability();
@@ -216,7 +215,7 @@ class AvailabilityModal extends Component<Props, State> {
                             <Text style={styles.headerText}>Night</Text>
                         </Col>
                     </Row>
-                    {this.state.items.map((item, index) => {
+                    {!!this.state.items && this.state.items.length > 0 && this.state.items.map((item, index) => {
                         return <WeekDayRow key={`week-day-row-for-${item.dayOfWeek}`} onToggle={this.onItemToggle} availability={item} />;
                     })}
                 </Grid>
@@ -272,5 +271,5 @@ const styles = StyleSheet.create({
     }
 });
 
-let codePushOptions = { checkFrequency: codePush.CheckFrequency.ON_APP_RESUME };
-export default codePush(codePushOptions)(AvailabilityModal);
+// let codePushOptions = { checkFrequency: codePush.CheckFrequency.ON_APP_RESUME };
+// export default codePush(codePushOptions)(AvailabilityModal);

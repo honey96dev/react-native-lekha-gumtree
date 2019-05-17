@@ -13,10 +13,9 @@ import {
 import {NavigationScreenProps} from "react-navigation";
 import {Button} from 'react-native-elements';
 import Swiper from 'react-native-swiper';
-import {authorize, AuthorizeResult, refresh, revoke} from 'react-native-app-auth';
+import {authorize, refresh, revoke} from 'react-native-app-auth';
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import AutoHeightImage from 'react-native-auto-height-image';
-import codePush from 'react-native-code-push';
 // @ts-ignore
 // import Spinner from 'react-native-loading-spinner-overlay';
 import {ROUTES} from "../routes";
@@ -46,7 +45,7 @@ interface State {
     doingLoading: boolean,
 };
 
-class LoginScreen extends Component<Props, State> {
+export default class LoginScreen extends Component<Props, State> {
     private animatedValue: Animated.Value;
     state = {
         isSplash: true,
@@ -431,5 +430,5 @@ const styles = StyleSheet.create({
     },
 });
 
-let codePushOptions = { checkFrequency: codePush.CheckFrequency.ON_APP_RESUME };
-export default codePush(codePushOptions)(LoginScreen);
+// let codePushOptions = { checkFrequency: codePush.CheckFrequency.ON_APP_RESUME };
+// export default codePush(codePushOptions)(LoginScreen);
