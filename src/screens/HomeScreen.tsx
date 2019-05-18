@@ -246,7 +246,8 @@ export default class HomeScreen extends React.Component<Props, State> {
                     }}
                     title={"Post New Ad"}
                     buttonStyle={[styles.buttonDefault, styles.postNewAdButton]}
-                    titleStyle={[styles.buttonTextDefault, styles.postNewAdButtonText]}/>
+                    titleStyle={[styles.buttonTextDefault, styles.postNewAdButtonText]}
+                    onPress={() => this.props.navigation.navigate(ROUTES.PostMain)}/>
                 <Button
                     type={"clear"}
                     title={"How it works?"}
