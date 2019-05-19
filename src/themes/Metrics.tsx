@@ -1,4 +1,4 @@
-import {Dimensions, Platform} from 'react-native';
+import {Dimensions, Platform, StatusBar} from 'react-native';
 import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 
 const { width, height } = Dimensions.get('window');
@@ -39,6 +39,9 @@ const metrics = {
     logo: hp(25),
   },
   logoWidth: wp(60),
+  // statusBarHeight: 24,
+  statusBarHeight: Platform.OS === 'ios' ? (!!StatusBar.currentHeight ? StatusBar.currentHeight : 24) : 0,
+  // statusBarHeight:(!!StatusBar.currentHeight ? StatusBar.currentHeight : 24),
 };
 
 export default metrics

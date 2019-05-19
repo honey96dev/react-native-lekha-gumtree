@@ -377,7 +377,8 @@ const styles = StyleSheet.create({
     },
     searchRow: {
         width: '100%',
-        height: Fonts.size.h1,
+        height: Fonts.size.h1 + Metrics.statusBarHeight,
+        paddingTop: Metrics.statusBarHeight,
         flexDirection: "row",
         paddingStart: Metrics.basePadding,
         paddingEnd: Metrics.basePadding,

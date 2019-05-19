@@ -1,5 +1,5 @@
 import React from 'react';
-import {LayoutAnimation, ScrollView, StyleSheet, Text, UIManager, View} from 'react-native';
+import {LayoutAnimation, Platform, ScrollView, StyleSheet, Text, UIManager, View} from 'react-native';
 import {NavigationScreenProps} from "react-navigation";
 // @ts-ignore
 import {Avatar, Button, Header} from "react-native-elements";
@@ -286,8 +286,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     header: {
-        height: hp(10),
-        paddingTop: 0,
+        height: hp(10) + Metrics.statusBarHeight,
+        paddingTop: Metrics.statusBarHeight,
     },
     userRow: {
         width: '100%',

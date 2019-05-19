@@ -759,8 +759,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     header: {
-        height: Fonts.size.h1,
-        paddingTop: 0,
+        height: Fonts.size.h1 + Metrics.statusBarHeight,
+        paddingTop: Metrics.statusBarHeight,
     },
     scroll: {
         width: '100%',

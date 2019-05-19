@@ -177,7 +177,7 @@ export default class HomeScreen extends React.Component<Props, State> {
         console.log('gallery', posts);
         return (
             <View style={styles.container} key={this.state.randomKey}>
-                <AutoHeightImage style={{marginTop: hp(3)}} width={Metrics.logoWidth} source={Images.logo}/>
+                <AutoHeightImage style={{marginTop: hp(3) + Metrics.statusBarHeight}} width={Metrics.logoWidth} source={Images.logo}/>
                 <View style={{height: Fonts.size.h1,}}>
                     <SearchLocationModal
                         text={this.getTextFromAddress()}
