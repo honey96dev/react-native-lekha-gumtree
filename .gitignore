@@ -79,3 +79,4 @@ android/
 ios/
 yarn.lock
 .DS_Store
+package-lock.json

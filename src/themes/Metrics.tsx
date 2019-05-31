@@ -40,7 +40,7 @@ const metrics = {
   },
   logoWidth: wp(60),
   // statusBarHeight: 24,
-  statusBarHeight: Platform.OS === 'ios' ? (!!StatusBar.currentHeight ? StatusBar.currentHeight : 24) : 0,
+  statusBarHeight: Platform.OS === 'ios' ? (!!StatusBar.currentHeight ? StatusBar.currentHeight : 32) : 0,
   // statusBarHeight:(!!StatusBar.currentHeight ? StatusBar.currentHeight : 24),
 };
 
